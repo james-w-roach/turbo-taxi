@@ -1,4 +1,5 @@
 let jumping = false;
+let falling = false;
 let jump;
 let gameOver = false;
 let firstObstacleInterval;
@@ -8,6 +9,7 @@ let addEasyShapes;
 let addMediumShapes;
 let addHardShapes
 let scoreInterval;
+let fall;
 
 let score = 0;
 
@@ -17,16 +19,16 @@ window.addEventListener('keydown', event => {
   if (event.code === 'Space') {
     if (!gameOver) {
       let direction = 'up';
-      if (!jumping) {
+      if (!jumping && !falling) {
         jumping = true;
         jump = setInterval(() => {
           if (getComputedStyle(document.querySelector('.car')).bottom !== '150px' && direction === 'up') {
             document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) + 2) + 'px';
-          } else if (getComputedStyle(document.querySelector('.car')).bottom !== '0px' && direction === 'down') {
+          } else if (getComputedStyle(document.querySelector('.car')).bottom > '0px' && direction === 'down') {
             document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) - 1) + 'px';
           } else if (getComputedStyle(document.querySelector('.car')).bottom === '150px') {
             direction = 'down';
-          } else if (getComputedStyle(document.querySelector('.car')).bottom === '0px') {
+          } else if (getComputedStyle(document.querySelector('.car')).bottom <= '0px') {
             direction = 'up';
             clearInterval(jump);
             jumping = false;
@@ -71,6 +73,18 @@ endGame = () => {
   document.querySelector('.game-over-score').textContent = 'Score: ' + score;
 }
 
+gapFall = obstacle => {
+  fall = setInterval(() => {
+
+    const obstacleRect = obstacle.getBoundingClientRect();
+    const wheelsRect = document.querySelector('.wheels').getBoundingClientRect();
+
+    if (falling && wheelsRect.bottom < obstacleRect.bottom) {
+      document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) - 1) + 'px';
+    }
+  }, 4);
+}
+
 moveObstacle = obstacle => {
 
   const move = setInterval(() => {
@@ -101,11 +115,24 @@ moveObstacle = obstacle => {
     // if the car is touching the obstacle, the game is over and all intervals are cleared
 
     for (i = 0; i < rects.length; i++) {
-      if ((((rects[i].bottom >= obstacleRect.top) && (rects[i].bottom <= obstacleRect.bottom))
+      if (!obstacle.className.includes('gap') && (((rects[i].bottom >= obstacleRect.top) && (rects[i].bottom <= obstacleRect.bottom))
         || ((rects[i].top <= obstacleRect.bottom) && (rects[i].top >= obstacleRect.top)))
         && (rects[i].right >= obstacleRect.left) && (rects[i].left <= obstacleRect.right)) {
-        clearInterval(move);
-        endGame();
+          clearInterval(move);
+          endGame();
+          break;
+      } else if (obstacle.className.includes('gap') &&
+        (rects[0].left >= obstacleRect.left) &&
+        (rects[0].right <= obstacleRect.right) &&
+        (rects[0].bottom >= obstacleRect.top)) {
+          if (rects[i].right >= obstacleRect.right || rects[i].bottom >= obstacleRect.bottom) {
+            clearInterval(move);
+            endGame();
+            break;
+          } else if (!falling) {
+            falling = true;
+            gapFall(obstacle);
+          }
       }
     }
   }, 4);
@@ -123,6 +150,11 @@ spawnObstacle = () => {
 }
 
 startGame = () => {
+
+  if (falling) {
+    clearInterval(fall);
+    falling = false;
+  }
 
   scoreInterval = setInterval(() => {
     score++;
