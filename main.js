@@ -157,6 +157,7 @@ startGame = () => {
   addHardShapes = setTimeout(() => {
     spawnlist.push('wide-floating block');
     spawnlist.push('low floating block');
+    spawnlist.push('taller block');
   }, 60000)
 
 }

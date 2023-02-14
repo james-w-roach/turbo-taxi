@@ -54,9 +54,9 @@ body {
 }
 
 .game-over-modal {
-  background-color: rgb(196, 53, 53);
-  border: white solid thick;
-  color: white;
+  background-color: rgb(255, 213, 0);
+  border: black solid thick;
+  color: black;
   height: 250px;
 }
 
@@ -77,22 +77,11 @@ body {
   transition: background-color 0.3s;
 }
 
-.start-over {
-  background-color: white;
-  color: black;
-  border: solid white;
-}
-
-.start-button:hover {
-  cursor: pointer;
-  background-color: white;
-  color: black;
-}
-
+.start-button:hover,
 .start-over:hover {
   cursor: pointer;
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: black;
 }
 
 .player-area {
@@ -221,6 +210,12 @@ body {
   background-color: darkorchid;
 }
 
+.taller {
+  width: 25px;
+  height: 100px;
+  background-color: darkred;
+}
+
 .tall-wide {
   width: 100px;
   height: 75px;
@@ -228,7 +223,7 @@ body {
 }
 
 .floating {
-  bottom: 100px;
+  bottom: 20px;
   background-color: rgb(0, 255, 255);
 }
 
