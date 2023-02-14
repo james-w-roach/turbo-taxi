@@ -182,8 +182,13 @@ body {
 }
 
 .long {
-  width: 100px;
+  width: 140px;
   height: 30px;
+}
+
+.tall {
+  width: 20px;
+  height: 90px;
 }
 
 .floating {

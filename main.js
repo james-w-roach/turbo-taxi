@@ -5,6 +5,7 @@ let firstObstacleInterval;
 let secondObstacleInterval;
 let secondObstacleTimeout;
 let wideGapTimeout;
+let tallBlockTimeout;
 
 const spawnlist = ['block', 'long block', 'floating block', 'gap'];
 
@@ -48,11 +49,13 @@ window.addEventListener('click', event => {
 endGame = () => {
   gameOver = true;
   jumping = false;
+  spawnlist.slice(0, 3);
   clearInterval(jump);
   clearInterval(firstObstacleInterval);
   clearInterval(secondObstacleInterval);
   clearTimeout(secondObstacleTimeout);
   clearTimeout(wideGapTimeout);
+  clearTimeout(tallBlockTimeout);
   document.querySelector('#game-over-modal').className = 'game-over-modal';
 }
 
@@ -126,4 +129,8 @@ startGame = () => {
   wideGapTimeout = setTimeout(() => {
     spawnlist.push('gap wide');
   }, 25000)
+
+  tallBlockTimeout = setTimeout(() => {
+    spawnlist.push('tall block');
+  }, 50000)
 }
