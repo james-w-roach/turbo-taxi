@@ -6,6 +6,9 @@ let secondObstacleInterval;
 let secondObstacleTimeout;
 let wideGapTimeout;
 let tallBlockTimeout;
+let scoreInterval;
+
+let score = 0;
 
 const spawnlist = ['block', 'long block', 'floating block', 'gap'];
 
@@ -42,6 +45,8 @@ window.addEventListener('click', event => {
     document.querySelector('.car').style.bottom = '0px';
     document.querySelectorAll('.obstacle').forEach(obstacle => obstacle.remove());
     document.querySelector('#game-over-modal').className = 'hidden';
+    score = 0;
+    document.querySelector('.score').textContent = 0;
     startGame();
   }
 });
@@ -56,10 +61,12 @@ endGame = () => {
   clearInterval(jump);
   clearInterval(firstObstacleInterval);
   clearInterval(secondObstacleInterval);
+  clearInterval(scoreInterval);
   clearTimeout(secondObstacleTimeout);
   clearTimeout(wideGapTimeout);
   clearTimeout(tallBlockTimeout);
   document.querySelector('#game-over-modal').className = 'game-over-modal';
+  document.querySelector('.game-over-score').textContent = 'Score: ' + score;
 }
 
 moveObstacle = obstacle => {
@@ -113,6 +120,12 @@ spawnObstacle = () => {
 }
 
 startGame = () => {
+
+  scoreInterval = setInterval(() => {
+    score++;
+    document.querySelector('.score').textContent = score;
+  }, 500);
+
   // the first interval spawns an obstacle every 2.5 seconds
 
   firstObstacleInterval = setInterval(spawnObstacle, 2500);

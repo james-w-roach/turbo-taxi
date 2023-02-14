@@ -17,6 +17,23 @@ body {
   overflow: hidden;
 }
 
+.score-container {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  text-align: center;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.score-header {
+  margin-bottom: 5px;
+}
+
+.score {
+  margin-top: 5px;
+}
+
 .start-modal,
 .game-over-modal {
   position: absolute;
@@ -40,6 +57,11 @@ body {
   background-color: rgb(196, 53, 53);
   border: white solid thick;
   color: white;
+  height: 250px;
+}
+
+.game-over-score {
+  margin: 5px auto 20px;
 }
 
 .start-button,
