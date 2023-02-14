@@ -42,6 +42,10 @@ window.addEventListener('keydown', event => {
 window.addEventListener('click', event => {
   if (event.target.className === 'start-button') {
     document.querySelector('.start-modal').remove();
+    document.querySelector('.instructions').style.opacity = '1';
+    setTimeout(() => {
+      document.querySelector('.instructions').style.opacity = '0';
+    }, 5000);
     startGame();
   } else if (event.target.className === 'start-over') {
     gameOver = false;
@@ -155,6 +159,8 @@ startGame = () => {
     clearInterval(fall);
     falling = false;
   }
+
+
 
   scoreInterval = setInterval(() => {
     score++;
