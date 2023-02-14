@@ -1,0 +1,102 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.screen {
+  width: 100%;
+  height: 100vh;
+  background-color: rgb(25, 160, 232);
+}
+
+.player-area {
+  height: 80%;
+  width: 100%;
+  position: relative;
+}
+
+.car {
+  position: absolute;
+  left: 100px;
+  bottom: 0;
+  width: 120px;
+  height: 65px;
+}
+
+.car-top {
+  background-color: rgb(255, 213, 0);
+  height: 25px;
+  width: 50%;
+  margin: auto;
+  transform: perspective(20px) rotateX(25deg);
+}
+
+.windows {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 5px 2px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: perspective(20px) rotateX(0deg);
+}
+
+.window {
+  background-color: rgb(57, 57, 57);
+  width: 47%;
+  height: 100%;
+}
+
+.car-bottom {
+  background-color: rgb(255, 213, 0);
+  position: relative;
+  height: 25px;
+  width: 100%;
+  border-radius: 0.3rem;
+}
+
+.headlight,
+.taillight {
+  width: 7px;
+  height: 7px;
+  position: absolute;
+  top: 0;
+}
+
+.headlight {
+  background-color: white;
+  right: 0;
+  border-radius: 0.1rem 0.3rem 0.1rem 0.1rem;
+}
+
+.taillight {
+  background-color: red;
+  left: 0;
+  border-radius: 0.3rem 0.1rem 0.1rem 0.1rem;
+}
+
+.wheels {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 25px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.wheel {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: black;
+}
+
+.ground {
+  background-color: grey;
+  height: 20%;
+  width: 100%;
+}
