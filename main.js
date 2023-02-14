@@ -1,6 +1,8 @@
 let jumping = false;
 let jump;
 let gameOver = false;
+let firstObstacleInterval;
+let secondObstacleInterval;
 
 const spawnlist = ['block', 'long block', 'floating block', 'gap'];
 
@@ -25,6 +27,13 @@ window.addEventListener('keydown', event => {
         }, 4);
       }
     }
+  }
+});
+
+window.addEventListener('click', event => {
+  if (event.target.className === 'start-button') {
+    document.querySelector('.start-modal').remove();
+    startGame();
   }
 });
 
@@ -82,22 +91,24 @@ spawnObstacle = () => {
   moveObstacle(block);
 }
 
-// the first interval spawns an obstacle every 2.5 seconds
+startGame = () => {
+  // the first interval spawns an obstacle every 2.5 seconds
 
-const firstObstacleInterval = setInterval(spawnObstacle, 2500);
+  firstObstacleInterval = setInterval(spawnObstacle, 2500);
 
-// the second interval adds another obstacle (they now spawn every 1.25s)
+  // the second interval adds another obstacle (they now spawn every 1.25s)
 
-let secondObstacleInterval;
+  secondObstacleInterval;
 
-setTimeout(() => {
-  if (!gameOver) {
-    secondObstacleInterval = setInterval(spawnObstacle, 2500);
-  }
-}, 11250)
+  setTimeout(() => {
+    if (!gameOver) {
+      secondObstacleInterval = setInterval(spawnObstacle, 2500);
+    }
+  }, 11250)
 
-// a wider gap is added to the game after 25s to increase difficulty
+  // a wider gap is added to the game after 25s to increase difficulty
 
-setTimeout(() => {
-  spawnlist.push('gap wide');
-}, 25000)
+  setTimeout(() => {
+    spawnlist.push('gap wide');
+  }, 25000)
+}
