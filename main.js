@@ -3,6 +3,8 @@ let jump;
 let gameOver = false;
 let firstObstacleInterval;
 let secondObstacleInterval;
+let secondObstacleTimeout;
+let wideGapTimeout;
 
 const spawnlist = ['block', 'long block', 'floating block', 'gap'];
 
@@ -34,8 +36,25 @@ window.addEventListener('click', event => {
   if (event.target.className === 'start-button') {
     document.querySelector('.start-modal').remove();
     startGame();
+  } else if (event.target.className === 'start-over') {
+    gameOver = false;
+    document.querySelector('.car').style.bottom = '0px';
+    document.querySelectorAll('.obstacle').forEach(obstacle => obstacle.remove());
+    document.querySelector('#game-over-modal').className = 'hidden';
+    startGame();
   }
 });
+
+endGame = () => {
+  gameOver = true;
+  jumping = false;
+  clearInterval(jump);
+  clearInterval(firstObstacleInterval);
+  clearInterval(secondObstacleInterval);
+  clearTimeout(secondObstacleTimeout);
+  clearTimeout(wideGapTimeout);
+  document.querySelector('#game-over-modal').className = 'game-over-modal';
+}
 
 moveObstacle = obstacle => {
 
@@ -69,12 +88,8 @@ moveObstacle = obstacle => {
     for (i = 0; i < rects.length; i++) {
       if ((rects[i].bottom >= obstacleRect.top) && (rects[i].bottom <= obstacleRect.bottom)
         && (rects[i].right >= obstacleRect.left) && (rects[i].left <= obstacleRect.right)) {
-        gameOver = true;
-        jumping = false;
         clearInterval(move);
-        clearInterval(jump);
-        clearInterval(firstObstacleInterval);
-        clearInterval(secondObstacleInterval);
+        endGame();
       }
     }
   }, 4);
@@ -100,7 +115,7 @@ startGame = () => {
 
   secondObstacleInterval;
 
-  setTimeout(() => {
+  secondObstacleTimeout = setTimeout(() => {
     if (!gameOver) {
       secondObstacleInterval = setInterval(spawnObstacle, 2500);
     }
@@ -108,7 +123,7 @@ startGame = () => {
 
   // a wider gap is added to the game after 25s to increase difficulty
 
-  setTimeout(() => {
+  wideGapTimeout = setTimeout(() => {
     spawnlist.push('gap wide');
   }, 25000)
 }
