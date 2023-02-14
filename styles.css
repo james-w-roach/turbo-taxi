@@ -184,15 +184,18 @@ body {
 .long {
   width: 140px;
   height: 30px;
+  background-color: greenyellow;
 }
 
 .tall {
   width: 20px;
   height: 90px;
+  background-color: darkorchid;
 }
 
 .floating {
   bottom: 100px;
+  background-color: rgb(0, 255, 255);
 }
 
 .gap {

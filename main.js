@@ -49,7 +49,10 @@ window.addEventListener('click', event => {
 endGame = () => {
   gameOver = true;
   jumping = false;
-  spawnlist.slice(0, 3);
+  const obstacleOverflow = spawnlist.length - 4;
+  if (obstacleOverflow) {
+    spawnlist.splice((spawnlist.length - obstacleOverflow), obstacleOverflow);
+  }
   clearInterval(jump);
   clearInterval(firstObstacleInterval);
   clearInterval(secondObstacleInterval);
