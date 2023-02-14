@@ -101,7 +101,8 @@ moveObstacle = obstacle => {
     // if the car is touching the obstacle, the game is over and all intervals are cleared
 
     for (i = 0; i < rects.length; i++) {
-      if ((rects[i].bottom >= obstacleRect.top) && (rects[i].bottom <= obstacleRect.bottom)
+      if ((((rects[i].bottom >= obstacleRect.top) && (rects[i].bottom <= obstacleRect.bottom))
+        || ((rects[i].top <= obstacleRect.bottom) && (rects[i].top >= obstacleRect.top)))
         && (rects[i].right >= obstacleRect.left) && (rects[i].left <= obstacleRect.right)) {
         clearInterval(move);
         endGame();
@@ -146,7 +147,7 @@ startGame = () => {
 
   addEasyShapes = setTimeout(() => {
     spawnlist.push('wide gap');
-    spawnlist.push('medium block');
+    spawnlist.push('medium-wide block');
   }, 20000)
 
   addMediumShapes = setTimeout(() => {
