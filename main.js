@@ -1,59 +1,103 @@
 let jumping = false;
+let jump;
+let gameOver = false;
 
 const spawnlist = ['block', 'long block', 'floating block', 'gap'];
 
 window.addEventListener('keydown', event => {
   if (event.code === 'Space') {
-    let direction = 'up';
-    if (!jumping) {
-      jumping = true;
-      const jump = setInterval(() => {
-        if (getComputedStyle(document.querySelector('.car')).bottom !== '150px' && direction === 'up') {
-          document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) + 2) + 'px';
-        } else if (getComputedStyle(document.querySelector('.car')).bottom !== '0px' && direction === 'down') {
-          document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) - 1) + 'px';
-        } else if (getComputedStyle(document.querySelector('.car')).bottom === '150px') {
-          direction = 'down';
-        } else if (getComputedStyle(document.querySelector('.car')).bottom === '0px') {
-          direction = 'up';
-          clearInterval(jump);
-          jumping = false;
-        }
-      }, 4);
+    if (!gameOver) {
+      let direction = 'up';
+      if (!jumping) {
+        jumping = true;
+        jump = setInterval(() => {
+          if (getComputedStyle(document.querySelector('.car')).bottom !== '150px' && direction === 'up') {
+            document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) + 2) + 'px';
+          } else if (getComputedStyle(document.querySelector('.car')).bottom !== '0px' && direction === 'down') {
+            document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) - 1) + 'px';
+          } else if (getComputedStyle(document.querySelector('.car')).bottom === '150px') {
+            direction = 'down';
+          } else if (getComputedStyle(document.querySelector('.car')).bottom === '0px') {
+            direction = 'up';
+            clearInterval(jump);
+            jumping = false;
+          }
+        }, 4);
+      }
     }
   }
 });
 
-moveObject = object => {
+moveObstacle = obstacle => {
+
   const move = setInterval(() => {
-    if (getComputedStyle(object).left !== '-300px') {
-      object.style.left = (parseInt(getComputedStyle(object).left.split('px')[0]) - 2) + 'px';
+
+    if (gameOver) {
+      // ensures all obstacles stop moving once game is over
+      clearInterval(move);
+    }
+
+    if (getComputedStyle(obstacle).left !== '-300px') {
+      obstacle.style.left = (parseInt(getComputedStyle(obstacle).left.split('px')[0]) - 2) + 'px';
     } else {
-      document.querySelector('.player-area').removeChild(object);
+      // each obstacle is removed after leaving the player area
+      document.querySelector('.player-area').removeChild(obstacle);
+    }
+
+    // declares boundaries of the obstacle as well as each section of the car
+    // individual sections are declared instead of the entire .car element to improve hit detection accuracy
+
+    const obstacleRect = obstacle.getBoundingClientRect();
+    const wheelsRect = document.querySelector('.wheels').getBoundingClientRect();
+    const lowerCarRect = document.querySelector('.car-bottom').getBoundingClientRect();
+    const upperCarRect = document.querySelector('.car-top').getBoundingClientRect();
+
+    const rects = [wheelsRect, lowerCarRect, upperCarRect];
+
+    // loops through each bounding rect to see if its touching the obstacle
+    // if the car is touching the obstacle, the game is over and all intervals are cleared
+
+    for (i = 0; i < rects.length; i++) {
+      if ((rects[i].bottom >= obstacleRect.top) && (rects[i].bottom <= obstacleRect.bottom)
+        && (rects[i].right >= obstacleRect.left) && (rects[i].left <= obstacleRect.right)) {
+        gameOver = true;
+        jumping = false;
+        clearInterval(move);
+        clearInterval(jump);
+        clearInterval(firstObstacleInterval);
+        clearInterval(secondObstacleInterval);
+      }
     }
   }, 4);
 }
 
-spawnObject = () => {
+spawnObstacle = () => {
   const $playerArea = document.querySelector('.player-area');
   const block = document.createElement('div');
 
-  block.className = spawnlist[Math.floor(Math.random() * spawnlist.length)];
-
-  console.log(spawnlist, block.className);
+  block.className = 'obstacle ' + spawnlist[Math.floor(Math.random() * spawnlist.length)];
 
   $playerArea.appendChild(block);
 
-  moveObject(block);
+  moveObstacle(block);
 }
 
-setInterval(spawnObject, 2500);
+// the first interval spawns an obstacle every 2.5 seconds
+
+const firstObstacleInterval = setInterval(spawnObstacle, 2500);
+
+// the second interval adds another obstacle (they now spawn every 1.25s)
+
+let secondObstacleInterval;
 
 setTimeout(() => {
-  setInterval(spawnObject, 2500);
+  if (!gameOver) {
+    secondObstacleInterval = setInterval(spawnObstacle, 2500);
+  }
 }, 11250)
+
+// a wider gap is added to the game after 25s to increase difficulty
 
 setTimeout(() => {
   spawnlist.push('gap wide');
-  console.log(spawnlist);
 }, 25000)

@@ -82,11 +82,11 @@ body {
 .wheels {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  width: 80%;
+  left: 10%;
   height: 25px;
   display: flex;
   justify-content: space-between;
-  padding: 0 10px;
 }
 
 .wheel {
