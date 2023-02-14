@@ -4,13 +4,14 @@ let gameOver = false;
 let firstObstacleInterval;
 let secondObstacleInterval;
 let secondObstacleTimeout;
-let wideGapTimeout;
-let tallBlockTimeout;
+let addEasyShapes;
+let addMediumShapes;
+let addHardShapes
 let scoreInterval;
 
 let score = 0;
 
-const spawnlist = ['block', 'long block', 'floating block', 'gap'];
+const spawnlist = ['block', 'low-wide block', 'floating block', 'gap'];
 
 window.addEventListener('keydown', event => {
   if (event.code === 'Space') {
@@ -63,8 +64,9 @@ endGame = () => {
   clearInterval(secondObstacleInterval);
   clearInterval(scoreInterval);
   clearTimeout(secondObstacleTimeout);
-  clearTimeout(wideGapTimeout);
-  clearTimeout(tallBlockTimeout);
+  clearTimeout(addEasyShapes);
+  clearTimeout(addMediumShapes);
+  clearTimeout(addHardShapes);
   document.querySelector('#game-over-modal').className = 'game-over-modal';
   document.querySelector('.game-over-score').textContent = 'Score: ' + score;
 }
@@ -78,7 +80,7 @@ moveObstacle = obstacle => {
       clearInterval(move);
     }
 
-    if (getComputedStyle(obstacle).left !== '-300px') {
+    if (getComputedStyle(obstacle).left !== '-350px') {
       obstacle.style.left = (parseInt(getComputedStyle(obstacle).left.split('px')[0]) - 2) + 'px';
     } else {
       // each obstacle is removed after leaving the player area
@@ -124,7 +126,7 @@ startGame = () => {
   scoreInterval = setInterval(() => {
     score++;
     document.querySelector('.score').textContent = score;
-  }, 500);
+  }, 200);
 
   // the first interval spawns an obstacle every 2.5 seconds
 
@@ -142,11 +144,19 @@ startGame = () => {
 
   // a wider gap is added to the game after 25s to increase difficulty
 
-  wideGapTimeout = setTimeout(() => {
-    spawnlist.push('gap wide');
-  }, 25000)
+  addEasyShapes = setTimeout(() => {
+    spawnlist.push('wide gap');
+    spawnlist.push('medium block');
+  }, 20000)
 
-  tallBlockTimeout = setTimeout(() => {
+  addMediumShapes = setTimeout(() => {
     spawnlist.push('tall block');
-  }, 50000)
+    spawnlist.push('tall-wide block');
+  }, 40000)
+
+  addHardShapes = setTimeout(() => {
+    spawnlist.push('wide-floating block');
+    spawnlist.push('low floating block');
+  }, 60000)
+
 }
