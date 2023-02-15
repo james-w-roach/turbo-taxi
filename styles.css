@@ -323,3 +323,13 @@ body {
   right: -7px;
   top: 10px;
 }
+
+.energy-blast {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: -27px;
+  top: 2px;
+  border-radius: 50%;
+  background-color: rgb(73, 234, 9);
+}

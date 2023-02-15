@@ -12,6 +12,10 @@ let scoreInterval;
 let fall;
 let newHiScore = false;
 let blasterTimeout;
+let blasterInterval;
+
+let blasterEnabled = false;
+let energyBlastInAir = false;
 
 let score = 0;
 let hiScore = 0;
@@ -43,6 +47,11 @@ window.addEventListener('keydown', event => {
           }
         }, 4);
       }
+    }
+  }
+  if (event.code === 'Enter') {
+    if (blasterEnabled) {
+      shootBlaster();
     }
   }
 });
@@ -90,6 +99,8 @@ endGame = () => {
   clearTimeout(addMediumShapes);
   clearTimeout(addHardShapes);
   clearTimeout(blasterTimeout);
+  energyBlastInAir = false;
+  blasterEnabled = false;
   document.querySelector('#game-over-modal').className = 'game-over-modal';
   document.querySelector('.game-over-score').textContent = 'Score: ' + score;
   if (newHiScore) {
@@ -116,7 +127,45 @@ grantPowerup = powerup => {
   if (powerup.includes('blaster')) {
     document.querySelector('.blaster').remove();
     document.querySelector('#blaster').className = 'car-blaster';
+    blasterEnabled = true;
   }
+}
+
+shootBlaster = () => {
+  if (!energyBlastInAir) {
+
+    energyBlastInAir = true;
+
+    const carBottom = document.querySelector('.car-bottom');
+    const lowerCarRect = document.querySelector('.car-bottom').getBoundingClientRect();
+    const $playerArea = document.querySelector('.player-area');
+
+    const blaster = document.querySelector('#car-blaster');
+
+    const $energyBlast = document.createElement('div');
+    $energyBlast.className = 'energy-blast';
+
+    $playerArea.appendChild($energyBlast);
+
+    const energyBlast = document.querySelector('.energy-blast');
+
+    energyBlast.style.top = Math.floor(lowerCarRect.top) + 'px';
+    energyBlast.style.left = Math.floor(lowerCarRect.right) + 'px';
+
+    blasterInterval = setInterval(() => {
+
+      const energyBlastRect = document.querySelector('.energy-blast').getBoundingClientRect();
+
+      if (parseInt(getComputedStyle(energyBlast).left.split('px')[0]) < window.innerWidth) {
+        energyBlast.style.left = (parseInt(getComputedStyle(energyBlast).left.split('px')[0]) + 3) + 'px';
+      } else {
+        clearInterval(blasterInterval);
+        energyBlast.remove();
+        energyBlastInAir = false;
+      }
+    }, 4);
+  }
+
 }
 
 moveObstacle = obstacle => {
