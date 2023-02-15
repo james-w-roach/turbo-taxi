@@ -309,7 +309,8 @@ moveObstacle = obstacle => {
       const energyBlastRect = document.querySelector('.energy-blast').getBoundingClientRect();
       const energyBlast = document.querySelector('.energy-blast');
 
-      if (((energyBlastRect.bottom >= obstacleRect.top && energyBlastRect.bottom <= obstacleRect.bottom)
+      if (!obstacle.className.includes('powerup') &&
+        ((energyBlastRect.bottom >= obstacleRect.top && energyBlastRect.bottom <= obstacleRect.bottom)
         || (energyBlastRect.top <= obstacleRect.bottom && energyBlastRect.top >= obstacleRect.top))
         && (energyBlastRect.right >= obstacleRect.left) && (energyBlastRect.left <= obstacleRect.right)) {
         obstacle.remove()
