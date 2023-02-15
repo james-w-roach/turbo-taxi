@@ -24,6 +24,9 @@ let secondJump = false;
 let score = 0;
 let hiScore = 0;
 let blasterAmmo = 10;
+let jumps = 10;
+
+activePowerups = [];
 
 if (localStorage.getItem('Hi-Score')) {
   hiScore = JSON.parse(localStorage.getItem('Hi-Score'));
@@ -88,6 +91,16 @@ window.addEventListener('keydown', event => {
             clearInterval(fall);
           }
           jumpCar(parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]));
+          jumps--;
+          if (jumps === 0) {
+            doubleJumpEnabled = false;
+            for (let i = 0; i < activePowerups.length; i++) {
+              if (activePowerups[i] === 'double-jump powerup') {
+                activePowerups.splice(i, 1);
+              }
+            }
+            startPowerupTimeout();
+          }
         }
       }
     }
@@ -147,6 +160,7 @@ endGame = () => {
   if (obstacleOverflow) {
     spawnlist.splice((spawnlist.length - obstacleOverflow), obstacleOverflow);
   }
+  activePowerups = [];
   clearInterval(jump);
   clearInterval(firstObstacleInterval);
   clearInterval(secondObstacleInterval);
@@ -156,6 +170,7 @@ endGame = () => {
   clearTimeout(addMediumShapes);
   clearTimeout(addHardShapes);
   clearTimeout(powerupTimeout);
+  clearInterval(blasterInterval);
   energyBlastInAir = false;
   blasterEnabled = false;
   doubleJumpEnabled = false;
@@ -191,14 +206,14 @@ grantPowerup = powerup => {
       }, 7000);
       blasterHelp = false;
     }
-    document.querySelector('.blaster').remove();
     document.querySelector('#car-blaster').className = 'car-blaster';
     document.querySelector('#ammo-counter').className = 'ammo-counter';
     blasterEnabled = true;
   } else if (powerup.includes('double-jump')) {
     doubleJumpEnabled = true;
-    document.querySelector('.double-jump').remove();
   }
+
+  activePowerups.push(powerup.split('obstacle ')[1]);
 }
 
 shootBlaster = () => {
@@ -239,6 +254,11 @@ shootBlaster = () => {
           document.querySelector('#ammo-counter').className = 'hidden';
           blasterAmmo = 10;
           document.querySelector('.ammo').textContent = 10;
+          for (let i = 0; i < activePowerups.length; i++) {
+            if (activePowerups[i] === 'blaster powerup') {
+              activePowerups.splice(i, 1);
+            }
+          }
           startPowerupTimeout();
         }
       }
@@ -283,6 +303,7 @@ moveObstacle = obstacle => {
         || ((rects[i].top <= obstacleRect.bottom) && (rects[i].top >= obstacleRect.top)))
         && (rects[i].right >= obstacleRect.left) && (rects[i].left <= obstacleRect.right)) {
         grantPowerup(obstacle.className);
+        obstacle.remove();
         break;
       } else if (!obstacle.className.includes('gap') && (((rects[i].bottom >= obstacleRect.top) && (rects[i].bottom <= obstacleRect.bottom))
         || ((rects[i].top <= obstacleRect.bottom) && (rects[i].top >= obstacleRect.top)))
@@ -355,9 +376,15 @@ spawnObstacle = () => {
 
 startPowerupTimeout = () => {
   powerupTimeout = setTimeout(() => {
-    spawnlist.push('blaster powerup');
-    spawnlist.push('double-jump powerup');
-  }, 20000);
+    powerups = ['blaster powerup', 'double-jump powerup'];
+
+    for (let i = 0; i < powerups.length; i++) {
+      if (!spawnlist.includes(powerups[i]) && !activePowerups.includes(powerups[i])) {
+        spawnlist.push(powerups[i]);
+      }
+    }
+
+  }, 15000);
 }
 
 startGame = () => {
