@@ -291,3 +291,35 @@ body {
 .wide {
   width: 300px;
 }
+
+.powerup {
+  width: 80px;
+  height: 80px;
+  background-color: transparent;
+  position: absolute;
+  bottom: 50px;
+  left: 100vw;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blaster {
+  border: solid thick rgb(73, 234, 9);
+}
+
+.type-blaster {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 32px;
+  color: rgb(73, 234, 9);
+}
+
+.car-blaster {
+  position: absolute;
+  width: 7px;
+  height: 5px;
+  background-color: black;
+  right: -7px;
+  top: 10px;
+}

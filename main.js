@@ -11,6 +11,7 @@ let addHardShapes
 let scoreInterval;
 let fall;
 let newHiScore = false;
+let blasterTimeout;
 
 let score = 0;
 let hiScore = 0;
@@ -59,6 +60,7 @@ window.addEventListener('click', event => {
     document.querySelector('.car').style.bottom = '0px';
     document.querySelectorAll('.obstacle').forEach(obstacle => obstacle.remove());
     document.querySelector('#game-over-modal').className = 'hidden';
+    document.querySelector('#blaster').className = 'hidden';
     score = 0;
     document.querySelector('.score').textContent = 0;
     document.querySelector('#new-hi-score').className = 'hidden';
@@ -87,6 +89,7 @@ endGame = () => {
   clearTimeout(addEasyShapes);
   clearTimeout(addMediumShapes);
   clearTimeout(addHardShapes);
+  clearTimeout(blasterTimeout);
   document.querySelector('#game-over-modal').className = 'game-over-modal';
   document.querySelector('.game-over-score').textContent = 'Score: ' + score;
   if (newHiScore) {
@@ -107,6 +110,13 @@ gapFall = obstacle => {
       document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) - 1) + 'px';
     }
   }, 4);
+}
+
+grantPowerup = powerup => {
+  if (powerup.includes('blaster')) {
+    document.querySelector('.blaster').remove();
+    document.querySelector('#blaster').className = 'car-blaster';
+  }
 }
 
 moveObstacle = obstacle => {
@@ -139,7 +149,12 @@ moveObstacle = obstacle => {
     // if the car is touching the obstacle, the game is over and all intervals are cleared
 
     for (i = 0; i < rects.length; i++) {
-      if (!obstacle.className.includes('gap') && (((rects[i].bottom >= obstacleRect.top) && (rects[i].bottom <= obstacleRect.bottom))
+      if (obstacle.className.includes('powerup') && (((rects[i].bottom >= obstacleRect.top) && (rects[i].bottom <= obstacleRect.bottom))
+        || ((rects[i].top <= obstacleRect.bottom) && (rects[i].top >= obstacleRect.top)))
+        && (rects[i].right >= obstacleRect.left) && (rects[i].left <= obstacleRect.right)) {
+        grantPowerup(obstacle.className);
+        break;
+      } else if (!obstacle.className.includes('gap') && (((rects[i].bottom >= obstacleRect.top) && (rects[i].bottom <= obstacleRect.bottom))
         || ((rects[i].top <= obstacleRect.bottom) && (rects[i].top >= obstacleRect.top)))
         && (rects[i].right >= obstacleRect.left) && (rects[i].left <= obstacleRect.right)) {
           clearInterval(move);
@@ -168,6 +183,25 @@ spawnObstacle = () => {
 
   block.className = 'obstacle ' + spawnlist[Math.floor(Math.random() * spawnlist.length)];
 
+  if (block.className.includes('powerup')) {
+    const powerupCenter = document.createElement('h1');
+
+    const type = block.className.split('obstacle ')[1].split(' powerup')[0];
+
+    if (type === 'blaster') {
+      powerupCenter.textContent = 'B';
+    }
+
+    powerupCenter.className = `type-${type}`;
+    block.appendChild(powerupCenter);
+
+    for (let i = 0; i < spawnlist.length; i++) {
+      if (spawnlist[i] === block.className.split('obstacle ')[1]) {
+        spawnlist.splice(i, 1);
+      }
+    }
+  }
+
   $playerArea.appendChild(block);
 
   moveObstacle(block);
@@ -179,8 +213,6 @@ startGame = () => {
     clearInterval(fall);
     falling = false;
   }
-
-
 
   scoreInterval = setInterval(() => {
     score++;
@@ -219,6 +251,10 @@ startGame = () => {
     spawnlist.push('tall block');
     spawnlist.push('tall-wide block');
   }, 40000)
+
+  blasterTimeout = setTimeout(() => {
+    spawnlist.push('blaster powerup');
+  }, 5000);
 
   addHardShapes = setTimeout(() => {
     spawnlist.push('wide-floating block');
