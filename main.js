@@ -19,6 +19,7 @@ let energyBlastInAir = false;
 
 let score = 0;
 let hiScore = 0;
+let blasterAmmo = 10;
 
 if (localStorage.getItem('Hi-Score')) {
   hiScore = JSON.parse(localStorage.getItem('Hi-Score'));
@@ -132,7 +133,7 @@ grantPowerup = powerup => {
 }
 
 shootBlaster = () => {
-  if (!energyBlastInAir) {
+  if (!energyBlastInAir && blasterAmmo !== 0) {
 
     energyBlastInAir = true;
 
@@ -159,10 +160,17 @@ shootBlaster = () => {
         clearInterval(blasterInterval);
         energyBlast.remove();
         energyBlastInAir = false;
+        blasterAmmo--;
+        if (blasterAmmo === 0) {
+          blasterEnabled = false;
+          energyBlastInAir = false;
+          document.querySelector('#blaster').className = 'hidden';
+          blasterAmmo = 10;
+          startBlasterTimeout();
+        }
       }
     }, 4);
   }
-
 }
 
 moveObstacle = obstacle => {
@@ -266,6 +274,13 @@ spawnObstacle = () => {
   moveObstacle(block);
 }
 
+startBlasterTimeout = () => {
+  blasterTimeout = setTimeout(() => {
+    spawnlist.push('blaster powerup');
+    console.log(spawnlist);
+  }, 20000);
+}
+
 startGame = () => {
 
   if (falling) {
@@ -311,14 +326,11 @@ startGame = () => {
     spawnlist.push('tall-wide block');
   }, 40000)
 
-  blasterTimeout = setTimeout(() => {
-    spawnlist.push('blaster powerup');
-  }, 5000);
-
   addHardShapes = setTimeout(() => {
     spawnlist.push('wide-floating block');
     spawnlist.push('low floating block');
     spawnlist.push('taller block');
   }, 60000)
 
+  startBlasterTimeout();
 }
