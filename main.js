@@ -92,7 +92,10 @@ window.addEventListener('keydown', event => {
           }
           jumpCar(parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]));
           jumps--;
+          document.querySelector('.jumps').textContent = jumps;
           if (jumps === 0) {
+            document.querySelector('#jump-counter').className = 'hidden';
+            document.querySelector('.jumps').textContent = 10;
             doubleJumpEnabled = false;
             for (let i = 0; i < activePowerups.length; i++) {
               if (activePowerups[i] === 'double-jump powerup') {
@@ -135,12 +138,14 @@ window.addEventListener('click', event => {
     document.querySelector('#game-over-modal').className = 'hidden';
     document.querySelector('#car-blaster').className = 'hidden';
     document.querySelector('#ammo-counter').className = 'hidden';
+    document.querySelector('#jump-counter').className = 'hidden';
     document.querySelector('#new-hi-score').className = 'hidden';
 
     blasterAmmo = 10;
     score = 0;
 
     document.querySelector('.ammo').textContent = 10;
+    document.querySelector('.jumps').textContent = 10;
     document.querySelector('.score').textContent = 0;
 
     startGame();
@@ -210,6 +215,7 @@ grantPowerup = powerup => {
     document.querySelector('#ammo-counter').className = 'ammo-counter';
     blasterEnabled = true;
   } else if (powerup.includes('double-jump')) {
+    document.querySelector('#jump-counter').className = 'jump-counter';
     doubleJumpEnabled = true;
   }
 
