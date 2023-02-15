@@ -16,6 +16,7 @@ let blasterInterval;
 
 let blasterEnabled = false;
 let energyBlastInAir = false;
+let blasterHelp = true;
 
 let score = 0;
 let hiScore = 0;
@@ -63,7 +64,7 @@ window.addEventListener('click', event => {
     document.querySelector('.instructions').style.opacity = '1';
     setTimeout(() => {
       document.querySelector('.instructions').style.opacity = '0';
-    }, 5000);
+    }, 7000);
     startGame();
   } else if (event.target.className === 'start-over') {
     gameOver = false;
@@ -134,6 +135,13 @@ gapFall = obstacle => {
 
 grantPowerup = powerup => {
   if (powerup.includes('blaster')) {
+    if (blasterHelp) {
+      document.querySelector('.blaster-help').style.opacity = '1';
+      setTimeout(() => {
+        document.querySelector('.blaster-help').style.opacity = '0';
+      }, 7000);
+      blasterHelp = false;
+    }
     document.querySelector('.blaster').remove();
     document.querySelector('#car-blaster').className = 'car-blaster';
     document.querySelector('#ammo-counter').className = 'ammo-counter';

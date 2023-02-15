@@ -51,7 +51,7 @@ body {
   position: absolute;
   width: 500px;
   left: calc(50vw - 250px);
-  top: 30vh;
+  top: 25vh;
   opacity: 0;
   color: white;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -63,6 +63,28 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.blaster-span {
+  color: rgb(73, 234, 9);
+}
+
+.powerup-container {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.powerup-logo {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .space-bar {
