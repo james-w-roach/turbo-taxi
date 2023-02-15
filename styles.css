@@ -48,7 +48,8 @@ body {
   margin-top: 5px;
 }
 
-.instructions {
+.instructions,
+.powerup-instructions {
   position: absolute;
   width: 500px;
   left: calc(50vw - 250px);
