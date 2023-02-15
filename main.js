@@ -11,12 +11,15 @@ let addHardShapes
 let scoreInterval;
 let fall;
 let newHiScore = false;
-let blasterTimeout;
+let powerupTimeout;
 let blasterInterval;
 
 let blasterEnabled = false;
 let energyBlastInAir = false;
 let blasterHelp = true;
+
+let doubleJumpEnabled = false;
+let secondJump = false;
 
 let score = 0;
 let hiScore = 0;
@@ -29,25 +32,64 @@ if (localStorage.getItem('Hi-Score')) {
 
 const spawnlist = ['block', 'low-wide block', 'floating block', 'gap'];
 
+jumpCar = secondJumpPosition => {
+
+  let jumpTarget = '150px';
+  let fallSpeed = 1;
+
+  if (secondJumpPosition) {
+    secondJumpPosition = Math.floor(secondJumpPosition + 100);
+    if (secondJumpPosition % 2) {
+      secondJumpPosition++;
+    }
+    let carPosition = parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]);
+    if (carPosition < 0 && carPosition % 2) {
+      document.querySelector('.car').style.bottom = (carPosition - 1) + 'px';
+    } else if (carPosition % 2) {
+      document.querySelector('.car').style.bottom = (carPosition + 1) + 'px';
+    }
+    jumpTarget = secondJumpPosition + 'px';
+    fallSpeed = 2;
+  }
+
+  let direction = 'up';
+  jumping = true;
+  jump = setInterval(() => {
+    if (getComputedStyle(document.querySelector('.car')).bottom !== jumpTarget && direction === 'up') {
+      document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) + 2) + 'px';
+    } else if (getComputedStyle(document.querySelector('.car')).bottom > '0px' && direction === 'down') {
+      document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) - fallSpeed) + 'px';
+    } else if (getComputedStyle(document.querySelector('.car')).bottom === jumpTarget) {
+      direction = 'down';
+    } else if (getComputedStyle(document.querySelector('.car')).bottom <= '0px') {
+      if (falling && secondJump) {
+        falling = false;
+        secondJump = false;
+        clearInterval(fall);
+        direction = 'up';
+      } else {
+        direction = 'up';
+        clearInterval(jump);
+        jumping = false;
+        if (secondJumpPosition) {
+          secondJump = false;
+        }
+      }
+    }
+  }, 4)
+}
+
 window.addEventListener('keydown', event => {
   if (event.code === 'Space') {
     if (!gameOver) {
-      let direction = 'up';
       if (!jumping && !falling) {
-        jumping = true;
-        jump = setInterval(() => {
-          if (getComputedStyle(document.querySelector('.car')).bottom !== '150px' && direction === 'up') {
-            document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) + 2) + 'px';
-          } else if (getComputedStyle(document.querySelector('.car')).bottom > '0px' && direction === 'down') {
-            document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) - 1) + 'px';
-          } else if (getComputedStyle(document.querySelector('.car')).bottom === '150px') {
-            direction = 'down';
-          } else if (getComputedStyle(document.querySelector('.car')).bottom <= '0px') {
-            direction = 'up';
-            clearInterval(jump);
-            jumping = false;
-          }
-        }, 4);
+        jumpCar();
+      } else if (doubleJumpEnabled) {
+        if (!secondJump) {
+          secondJump = true;
+          clearInterval(jump);
+          jumpCar(parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]));
+        }
       }
     }
   }
@@ -108,9 +150,11 @@ endGame = () => {
   clearTimeout(addEasyShapes);
   clearTimeout(addMediumShapes);
   clearTimeout(addHardShapes);
-  clearTimeout(blasterTimeout);
+  clearTimeout(powerupTimeout);
   energyBlastInAir = false;
   blasterEnabled = false;
+  doubleJumpEnabled = false;
+  secondJump = false;
   document.querySelector('#game-over-modal').className = 'game-over-modal';
   document.querySelector('.game-over-score').textContent = 'Score: ' + score;
   if (newHiScore) {
@@ -146,6 +190,9 @@ grantPowerup = powerup => {
     document.querySelector('#car-blaster').className = 'car-blaster';
     document.querySelector('#ammo-counter').className = 'ammo-counter';
     blasterEnabled = true;
+  } else if (powerup.includes('double-jump')) {
+    doubleJumpEnabled = true;
+    document.querySelector('.double-jump').remove();
   }
 }
 
@@ -187,7 +234,7 @@ shootBlaster = () => {
           document.querySelector('#ammo-counter').className = 'hidden';
           blasterAmmo = 10;
           document.querySelector('.ammo').textContent = 10;
-          startBlasterTimeout();
+          startPowerupTimeout();
         }
       }
     }, 4);
@@ -207,6 +254,9 @@ moveObstacle = obstacle => {
       obstacle.style.left = (parseInt(getComputedStyle(obstacle).left.split('px')[0]) - 2) + 'px';
     } else {
       // each obstacle is removed after leaving the player area
+      if (obstacle.className.includes('powerup')) {
+        startPowerupTimeout();
+      }
       document.querySelector('.player-area').removeChild(obstacle);
     }
 
@@ -278,6 +328,8 @@ spawnObstacle = () => {
 
     if (type === 'blaster') {
       powerupCenter.textContent = 'B';
+    } else if (type === 'double-jump') {
+      powerupCenter.textContent = 'D';
     }
 
     powerupCenter.className = `type-${type}`;
@@ -295,11 +347,11 @@ spawnObstacle = () => {
   moveObstacle(block);
 }
 
-startBlasterTimeout = () => {
-  blasterTimeout = setTimeout(() => {
+startPowerupTimeout = () => {
+  powerupTimeout = setTimeout(() => {
     spawnlist.push('blaster powerup');
-    console.log(spawnlist);
-  }, 20000);
+    spawnlist.push('double-jump powerup');
+  }, 10000);
 }
 
 startGame = () => {
@@ -353,5 +405,5 @@ startGame = () => {
     spawnlist.push('taller block');
   }, 60000)
 
-  startBlasterTimeout();
+  startPowerupTimeout();
 }
