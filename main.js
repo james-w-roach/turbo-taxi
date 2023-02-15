@@ -67,13 +67,21 @@ window.addEventListener('click', event => {
     startGame();
   } else if (event.target.className === 'start-over') {
     gameOver = false;
+
     document.querySelector('.car').style.bottom = '0px';
     document.querySelectorAll('.obstacle').forEach(obstacle => obstacle.remove());
+
     document.querySelector('#game-over-modal').className = 'hidden';
-    document.querySelector('#blaster').className = 'hidden';
-    score = 0;
-    document.querySelector('.score').textContent = 0;
+    document.querySelector('#car-blaster').className = 'hidden';
+    document.querySelector('#ammo-counter').className = 'hidden';
     document.querySelector('#new-hi-score').className = 'hidden';
+
+    blasterAmmo = 10;
+    score = 0;
+
+    document.querySelector('.ammo').textContent = 10;
+    document.querySelector('.score').textContent = 0;
+
     startGame();
   }
 });
@@ -127,7 +135,8 @@ gapFall = obstacle => {
 grantPowerup = powerup => {
   if (powerup.includes('blaster')) {
     document.querySelector('.blaster').remove();
-    document.querySelector('#blaster').className = 'car-blaster';
+    document.querySelector('#car-blaster').className = 'car-blaster';
+    document.querySelector('#ammo-counter').className = 'ammo-counter';
     blasterEnabled = true;
   }
 }
@@ -149,8 +158,11 @@ shootBlaster = () => {
 
     const energyBlast = document.querySelector('.energy-blast');
 
-    energyBlast.style.top = Math.floor(lowerCarRect.top) + 5 + 'px';
+    energyBlast.style.top = Math.floor(lowerCarRect.top) + 4 + 'px';
     energyBlast.style.left = Math.floor(lowerCarRect.right) + 7 + 'px';
+
+    blasterAmmo--;
+    document.querySelector('.ammo').textContent = blasterAmmo;
 
     blasterInterval = setInterval(() => {
 
@@ -160,12 +172,13 @@ shootBlaster = () => {
         clearInterval(blasterInterval);
         energyBlast.remove();
         energyBlastInAir = false;
-        blasterAmmo--;
         if (blasterAmmo === 0) {
           blasterEnabled = false;
           energyBlastInAir = false;
-          document.querySelector('#blaster').className = 'hidden';
+          document.querySelector('#car-blaster').className = 'hidden';
+          document.querySelector('#ammo-counter').className = 'hidden';
           blasterAmmo = 10;
+          document.querySelector('.ammo').textContent = 10;
           startBlasterTimeout();
         }
       }
@@ -314,7 +327,7 @@ startGame = () => {
     }
   }, 11250)
 
-  // a wider gap is added to the game after 25s to increase difficulty
+  // more shapes are added at different points in the game to increase difficulty
 
   addEasyShapes = setTimeout(() => {
     spawnlist.push('wide gap');
