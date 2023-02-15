@@ -10,8 +10,15 @@ let addMediumShapes;
 let addHardShapes
 let scoreInterval;
 let fall;
+let newHiScore = false;
 
 let score = 0;
+let hiScore = 0;
+
+if (localStorage.getItem('Hi-Score')) {
+  hiScore = JSON.parse(localStorage.getItem('Hi-Score'));
+  document.querySelector('.hi-score').textContent = hiScore;
+}
 
 const spawnlist = ['block', 'low-wide block', 'floating block', 'gap'];
 
@@ -54,7 +61,14 @@ window.addEventListener('click', event => {
     document.querySelector('#game-over-modal').className = 'hidden';
     score = 0;
     document.querySelector('.score').textContent = 0;
+    document.querySelector('#new-hi-score').className = 'hidden';
     startGame();
+  }
+});
+
+window.addEventListener('beforeunload', () => {
+  if (hiScore) {
+    localStorage.setItem('Hi-Score', JSON.stringify(hiScore));
   }
 });
 
@@ -75,6 +89,12 @@ endGame = () => {
   clearTimeout(addHardShapes);
   document.querySelector('#game-over-modal').className = 'game-over-modal';
   document.querySelector('.game-over-score').textContent = 'Score: ' + score;
+  if (newHiScore) {
+    const hiScoreJSON = JSON.stringify(hiScore);
+    localStorage.setItem('Hi-Score', hiScoreJSON);
+    document.querySelector('#new-hi-score').className = 'new-hi-score';
+    newHiScore = false;
+  }
 }
 
 gapFall = obstacle => {
@@ -164,7 +184,14 @@ startGame = () => {
 
   scoreInterval = setInterval(() => {
     score++;
+
     document.querySelector('.score').textContent = score;
+
+    if (score > hiScore) {
+      newHiScore = true;
+      hiScore = score;
+      document.querySelector('.hi-score').textContent = score;
+    }
   }, 200);
 
   // the first interval spawns an obstacle every 2.5 seconds

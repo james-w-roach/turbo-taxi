@@ -17,7 +17,8 @@ body {
   overflow: hidden;
 }
 
-.score-container {
+.score-container,
+.hi-score-container {
   position: absolute;
   width: 120px;
   height: 120px;
@@ -26,11 +27,17 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.hi-score-container {
+  left: 110px;
+}
+
 .score-header {
   margin-bottom: 5px;
 }
 
-.score {
+.score,
+.hi-score,
+.new-hi-score {
   margin-top: 5px;
 }
 
@@ -88,7 +95,7 @@ body {
   background-color: rgb(255, 213, 0);
   border: black solid thick;
   color: black;
-  height: 250px;
+  height: 280px;
 }
 
 .game-over-score {
