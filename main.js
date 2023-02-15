@@ -62,18 +62,11 @@ jumpCar = secondJumpPosition => {
     } else if (getComputedStyle(document.querySelector('.car')).bottom === jumpTarget) {
       direction = 'down';
     } else if (getComputedStyle(document.querySelector('.car')).bottom <= '0px') {
-      if (falling && secondJump) {
-        falling = false;
+      direction = 'up';
+      clearInterval(jump);
+      jumping = false;
+      if (secondJumpPosition) {
         secondJump = false;
-        clearInterval(fall);
-        direction = 'up';
-      } else {
-        direction = 'up';
-        clearInterval(jump);
-        jumping = false;
-        if (secondJumpPosition) {
-          secondJump = false;
-        }
       }
     }
   }, 4)
@@ -87,7 +80,13 @@ window.addEventListener('keydown', event => {
       } else if (doubleJumpEnabled) {
         if (!secondJump) {
           secondJump = true;
-          clearInterval(jump);
+          if (jumping) {
+            clearInterval(jump);
+          }
+          if (falling) {
+            falling = false;
+            clearInterval(fall);
+          }
           jumpCar(parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]));
         }
       }
@@ -293,7 +292,7 @@ moveObstacle = obstacle => {
             clearInterval(move);
             endGame();
             break;
-          } else if (!falling) {
+          } else if (!falling && !jumping && !secondJump) {
             falling = true;
             gapFall(obstacle);
           }
@@ -351,7 +350,7 @@ startPowerupTimeout = () => {
   powerupTimeout = setTimeout(() => {
     spawnlist.push('blaster powerup');
     spawnlist.push('double-jump powerup');
-  }, 10000);
+  }, 20000);
 }
 
 startGame = () => {
