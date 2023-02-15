@@ -136,7 +136,6 @@ shootBlaster = () => {
 
     energyBlastInAir = true;
 
-    const carBottom = document.querySelector('.car-bottom');
     const lowerCarRect = document.querySelector('.car-bottom').getBoundingClientRect();
     const $playerArea = document.querySelector('.player-area');
 
@@ -149,12 +148,10 @@ shootBlaster = () => {
 
     const energyBlast = document.querySelector('.energy-blast');
 
-    energyBlast.style.top = Math.floor(lowerCarRect.top) + 'px';
-    energyBlast.style.left = Math.floor(lowerCarRect.right) + 'px';
+    energyBlast.style.top = Math.floor(lowerCarRect.top) + 5 + 'px';
+    energyBlast.style.left = Math.floor(lowerCarRect.right) + 7 + 'px';
 
     blasterInterval = setInterval(() => {
-
-      const energyBlastRect = document.querySelector('.energy-blast').getBoundingClientRect();
 
       if (parseInt(getComputedStyle(energyBlast).left.split('px')[0]) < window.innerWidth) {
         energyBlast.style.left = (parseInt(getComputedStyle(energyBlast).left.split('px')[0]) + 3) + 'px';
@@ -221,6 +218,19 @@ moveObstacle = obstacle => {
             falling = true;
             gapFall(obstacle);
           }
+      }
+    }
+
+    if (blasterEnabled && energyBlastInAir) {
+      const energyBlastRect = document.querySelector('.energy-blast').getBoundingClientRect();
+      const energyBlast = document.querySelector('.energy-blast');
+
+      if (((energyBlastRect.bottom >= obstacleRect.top && energyBlastRect.bottom <= obstacleRect.bottom)
+        || (energyBlastRect.top <= obstacleRect.bottom && energyBlastRect.top >= obstacleRect.top))
+        && (energyBlastRect.right >= obstacleRect.left) && (energyBlastRect.left <= obstacleRect.right)) {
+        obstacle.remove()
+        energyBlast.remove();
+        energyBlastInAir = false;
       }
     }
   }, 4);
