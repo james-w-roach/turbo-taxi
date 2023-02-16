@@ -1,29 +1,35 @@
-let jumping = false;
-let falling = false;
-let jump;
-let gameOver = false;
-let firstObstacleInterval;
-let secondObstacleInterval;
-let secondObstacleTimeout;
-let addEasyShapes;
-let addMediumShapes;
-let addHardShapes
-let scoreInterval;
-let fall;
-let newHiScore = false;
-let powerupTimeout;
-let blasterInterval;
-
-let blasterEnabled = false;
-let energyBlastInAir = false;
-
-let doubleJumpEnabled = false;
-let secondJump = false;
-
 let score = 0;
 let hiScore = 0;
 let blasterAmmo = 10;
 let jumps = 10;
+
+let newHiScore = false;
+let gameOver = false;
+
+let jumping = false;
+let falling = false;
+
+let jump;
+let fall;
+
+let firstObstacleInterval;
+let secondObstacleInterval;
+let secondObstacleTimeout;
+
+let addEasyShapes;
+let addMediumShapes;
+let addHardShapes
+
+let scoreInterval;
+
+let powerupTimeout;
+let blasterInterval;
+
+let blasterEnabled = false;
+let blastCount = 0;
+
+let doubleJumpEnabled = false;
+let secondJump = false;
 
 activePowerups = [];
 
@@ -149,6 +155,13 @@ window.addEventListener('click', event => {
     document.querySelector('.jumps').textContent = 10;
     document.querySelector('.score').textContent = 0;
 
+    for (let i = 1; i <= blastCount; i++) {
+      if (document.querySelector(`#blast${i}`)) {
+        document.querySelector(`#blast${i}`).remove();
+      }
+    }
+    blastCount = 0;
+
     startGame();
   }
 });
@@ -177,7 +190,6 @@ endGame = () => {
   clearTimeout(addHardShapes);
   clearTimeout(powerupTimeout);
   clearInterval(blasterInterval);
-  energyBlastInAir = false;
   blasterEnabled = false;
   doubleJumpEnabled = false;
   secondJump = false;
@@ -227,9 +239,11 @@ grantPowerup = powerup => {
 }
 
 shootBlaster = () => {
-  if (!energyBlastInAir && blasterAmmo !== 0) {
+  if (blasterAmmo !== 0) {
 
-    energyBlastInAir = true;
+    if (blastCount < 10) {
+      blastCount++
+    }
 
     const lowerCarRect = document.querySelector('.car-bottom').getBoundingClientRect();
     const $playerArea = document.querySelector('.player-area');
@@ -238,10 +252,11 @@ shootBlaster = () => {
 
     const $energyBlast = document.createElement('div');
     $energyBlast.className = 'energy-blast';
+    $energyBlast.id = `blast${blastCount}`;
 
     $playerArea.appendChild($energyBlast);
 
-    const energyBlast = document.querySelector('.energy-blast');
+    const energyBlast = document.querySelector(`#blast${blastCount}`);
 
     energyBlast.style.top = Math.floor(lowerCarRect.top) + 4 + 'px';
     energyBlast.style.left = Math.floor(lowerCarRect.right) + 7 + 'px';
@@ -249,17 +264,16 @@ shootBlaster = () => {
     blasterAmmo--;
     document.querySelector('.ammo').textContent = blasterAmmo;
 
-    blasterInterval = setInterval(() => {
-
-      if (parseInt(getComputedStyle(energyBlast).left.split('px')[0]) < window.innerWidth) {
+    moveBlast = energyBlast => {
+      if (gameOver) {
+        clearInterval(blasterInterval);
+      } else if (parseInt(getComputedStyle(energyBlast).left.split('px')[0]) < window.innerWidth) {
         energyBlast.style.left = (parseInt(getComputedStyle(energyBlast).left.split('px')[0]) + 3) + 'px';
       } else {
-        clearInterval(blasterInterval);
         energyBlast.remove();
-        energyBlastInAir = false;
-        if (blasterAmmo === 0) {
+        if (blasterAmmo === 0 && blastCount === 10 && !document.querySelector('#blast10')) {
+          clearInterval(blasterInterval);
           blasterEnabled = false;
-          energyBlastInAir = false;
           document.querySelector('#car-blaster').className = 'car-blaster deactivated';
           document.querySelector('#ammo-counter').className = 'hidden';
           blasterAmmo = 10;
@@ -272,6 +286,10 @@ shootBlaster = () => {
           startPowerupTimeout();
         }
       }
+    }
+
+    blasterInterval = setInterval(() => {
+      moveBlast(energyBlast)
     }, 4);
   }
 }
@@ -336,17 +354,24 @@ moveObstacle = obstacle => {
       }
     }
 
-    if (blasterEnabled && energyBlastInAir) {
-      const energyBlastRect = document.querySelector('.energy-blast').getBoundingClientRect();
-      const energyBlast = document.querySelector('.energy-blast');
+    if (blasterEnabled) {
 
-      if (!obstacle.className.includes('powerup') &&
-        ((energyBlastRect.bottom >= obstacleRect.top && energyBlastRect.bottom <= obstacleRect.bottom)
-        || (energyBlastRect.top <= obstacleRect.bottom && energyBlastRect.top >= obstacleRect.top))
-        && (energyBlastRect.right >= obstacleRect.left) && (energyBlastRect.left <= obstacleRect.right)) {
-        obstacle.remove()
-        energyBlast.remove();
-        energyBlastInAir = false;
+      for (let i = 1; i <= blastCount; i++) {
+        const blast = `#blast${i}`;
+
+        if (document.querySelector(blast)) {
+
+          const energyBlast = document.querySelector(blast);
+          const energyBlastRect = document.querySelector(blast).getBoundingClientRect();
+
+          if (!obstacle.className.includes('powerup') &&
+            ((energyBlastRect.bottom >= obstacleRect.top && energyBlastRect.bottom <= obstacleRect.bottom)
+              || (energyBlastRect.top <= obstacleRect.bottom && energyBlastRect.top >= obstacleRect.top))
+            && (energyBlastRect.right >= obstacleRect.left) && (energyBlastRect.left <= obstacleRect.right)) {
+              obstacle.remove()
+              energyBlast.remove();
+          }
+        }
       }
     }
   }, 4);
