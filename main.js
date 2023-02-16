@@ -16,7 +16,6 @@ let blasterInterval;
 
 let blasterEnabled = false;
 let energyBlastInAir = false;
-let blasterHelp = true;
 
 let doubleJumpEnabled = false;
 let secondJump = false;
@@ -96,6 +95,7 @@ window.addEventListener('keydown', event => {
           if (jumps === 0) {
             document.querySelector('#jump-counter').className = 'hidden';
             document.querySelector('.jumps').textContent = 10;
+            jumps = 10;
             doubleJumpEnabled = false;
             for (let i = 0; i < activePowerups.length; i++) {
               if (activePowerups[i] === 'double-jump powerup') {
@@ -204,17 +204,20 @@ gapFall = obstacle => {
 
 grantPowerup = powerup => {
   if (powerup.includes('blaster')) {
-    if (blasterHelp) {
-      document.querySelector('.blaster-help').style.opacity = '1';
-      setTimeout(() => {
-        document.querySelector('.blaster-help').style.opacity = '0';
-      }, 7000);
-      blasterHelp = false;
-    }
+    document.querySelector('#blaster-pickup').className = 'pickup-title-container';
+    document.querySelector('#double-jump-pickup').className = 'hidden';
+    setTimeout(() => {
+      document.querySelector('#blaster-pickup').className = 'hidden';
+    }, 2000);
     document.querySelector('#car-blaster').className = 'car-blaster';
     document.querySelector('#ammo-counter').className = 'ammo-counter';
     blasterEnabled = true;
   } else if (powerup.includes('double-jump')) {
+    document.querySelector('#double-jump-pickup').className = 'pickup-title-container';
+    document.querySelector('#blaster-pickup').className = 'hidden';
+    setTimeout(() => {
+      document.querySelector('#double-jump-pickup').className = 'hidden';
+    }, 2000);
     document.querySelector('#jump-counter').className = 'jump-counter';
     doubleJumpEnabled = true;
   }

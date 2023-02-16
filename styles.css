@@ -79,8 +79,31 @@ body {
   justify-content: center;
 }
 
+.pickup-title-container {
+  position: absolute;
+  width: 500px;
+  left: calc(50vw - 250px);
+  top: 30vh;
+  text-align: center;
+}
+
+.pickup-title {
+  color: white;
+  animation: blink 0.5s step-start infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 .blaster-span {
   color: rgb(73, 234, 9);
+}
+
+.dj-span {
+  color: orange;
 }
 
 .powerup-container {
