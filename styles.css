@@ -234,6 +234,7 @@ body {
   height: 25px;
   width: 100%;
   border-radius: 0.3rem;
+  z-index: 3;
 }
 
 .headlight,
@@ -273,6 +274,7 @@ body {
   border-radius: 50%;
   background-color: black;
   top: -10px;
+  z-index: 3;
 }
 
 .left {
@@ -396,7 +398,13 @@ body {
   height: 5px;
   background-color: black;
   right: -7px;
-  top: 10px;
+  top: 36px;
+  transition: transform 0.5s;
+  z-index: 1;
+}
+
+.deactivated {
+  transform: translateX(-7px);
 }
 
 .energy-blast {

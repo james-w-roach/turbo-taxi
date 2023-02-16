@@ -136,12 +136,13 @@ window.addEventListener('click', event => {
     document.querySelectorAll('.obstacle').forEach(obstacle => obstacle.remove());
 
     document.querySelector('#game-over-modal').className = 'hidden';
-    document.querySelector('#car-blaster').className = 'hidden';
+    document.querySelector('#car-blaster').className = 'car-blaster deactivated';
     document.querySelector('#ammo-counter').className = 'hidden';
     document.querySelector('#jump-counter').className = 'hidden';
     document.querySelector('#new-hi-score').className = 'hidden';
 
     blasterAmmo = 10;
+    jumps = 10;
     score = 0;
 
     document.querySelector('.ammo').textContent = 10;
@@ -259,7 +260,7 @@ shootBlaster = () => {
         if (blasterAmmo === 0) {
           blasterEnabled = false;
           energyBlastInAir = false;
-          document.querySelector('#car-blaster').className = 'hidden';
+          document.querySelector('#car-blaster').className = 'car-blaster deactivated';
           document.querySelector('#ammo-counter').className = 'hidden';
           blasterAmmo = 10;
           document.querySelector('.ammo').textContent = 10;
