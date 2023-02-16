@@ -47,7 +47,7 @@ body {
 }
 
 .hi-score-container {
-  left: 110px;
+  left: 117px;
 }
 
 .score-header {
@@ -342,7 +342,7 @@ body {
   background-color: rgb(14, 20, 99);
 }
 
-.low {
+.mid {
   bottom: 50px;
   background-color: darkgreen;
 }
@@ -359,6 +359,10 @@ body {
 
 .wide {
   width: 300px;
+}
+
+.wider {
+  width: 340px;
 }
 
 .powerup {
@@ -404,7 +408,7 @@ body {
 }
 
 .deactivated {
-  transform: translateX(-7px);
+  transform: translateX(-8px);
 }
 
 .energy-blast {

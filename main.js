@@ -465,11 +465,12 @@ startGame = () => {
   addMediumShapes = setTimeout(() => {
     spawnlist.push('tall block');
     spawnlist.push('tall-wide block');
+    spawnlist.push('wider gap');
   }, 40000)
 
   addHardShapes = setTimeout(() => {
     spawnlist.push('wide-floating block');
-    spawnlist.push('low floating block');
+    spawnlist.push('mid floating block');
     spawnlist.push('taller block');
   }, 60000)
 
