@@ -1,7 +1,7 @@
 let score = 0;
 let hiScore = 0;
-let blasterAmmo = 10;
-let jumps = 10;
+let blasterAmmo = 5;
+let jumps = 5;
 
 let newHiScore = false;
 let gameOver = false;
@@ -100,8 +100,8 @@ window.addEventListener('keydown', event => {
           document.querySelector('.jumps').textContent = jumps;
           if (jumps === 0) {
             document.querySelector('#jump-counter').className = 'hidden';
-            document.querySelector('.jumps').textContent = 10;
-            jumps = 10;
+            document.querySelector('.jumps').textContent = 5;
+            jumps = 5;
             doubleJumpEnabled = false;
             for (let i = 0; i < activePowerups.length; i++) {
               if (activePowerups[i] === 'double-jump powerup') {
@@ -147,12 +147,12 @@ window.addEventListener('click', event => {
     document.querySelector('#jump-counter').className = 'hidden';
     document.querySelector('#new-hi-score').className = 'hidden';
 
-    blasterAmmo = 10;
-    jumps = 10;
+    blasterAmmo = 5;
+    jumps = 5;
     score = 0;
 
-    document.querySelector('.ammo').textContent = 10;
-    document.querySelector('.jumps').textContent = 10;
+    document.querySelector('.ammo').textContent = 5;
+    document.querySelector('.jumps').textContent = 5;
     document.querySelector('.score').textContent = 0;
 
     for (let i = 1; i <= blastCount; i++) {
@@ -245,7 +245,7 @@ grantPowerup = powerup => {
 shootBlaster = () => {
   if (blasterAmmo !== 0) {
 
-    if (blastCount < 10) {
+    if (blastCount < 5) {
       blastCount++
     }
 
@@ -275,13 +275,13 @@ shootBlaster = () => {
         energyBlast.style.left = (parseInt(getComputedStyle(energyBlast).left.split('px')[0]) + 3) + 'px';
       } else {
         energyBlast.remove();
-        if (blasterAmmo === 0 && blastCount === 10 && !document.querySelector('#blast10')) {
+        if (blasterAmmo === 0 && blastCount === 5 && !document.querySelector('#blast5')) {
           clearInterval(blasterInterval);
           blasterEnabled = false;
           document.querySelector('#car-blaster').className = 'car-blaster deactivated';
           document.querySelector('#ammo-counter').className = 'hidden';
-          blasterAmmo = 10;
-          document.querySelector('.ammo').textContent = 10;
+          blasterAmmo = 5;
+          document.querySelector('.ammo').textContent = 5;
           for (let i = 0; i < activePowerups.length; i++) {
             if (activePowerups[i] === 'blaster powerup') {
               activePowerups.splice(i, 1);
