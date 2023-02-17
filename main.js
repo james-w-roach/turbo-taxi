@@ -193,6 +193,7 @@ window.addEventListener('click', event => {
     document.querySelector('#car-blaster').className = 'car-blaster deactivated';
     document.querySelector('#ammo-counter').className = 'hidden';
     document.querySelector('#jump-counter').className = 'hidden';
+    document.querySelector('#turbo-counter').className = 'hidden';
     document.querySelector('#blaster-help').className = 'hidden';
     document.querySelector('#new-hi-score').className = 'hidden';
 
@@ -292,13 +293,17 @@ grantPowerup = powerup => {
     doubleJumpEnabled = true;
   } else if (powerup.includes('turbo')) {
     turboModeEnabled = true;
+    document.querySelector('#turbo-counter').className = 'turbo-counter';
     turboDirection = 'down';
     flyCar();
     turboModeTimer = setInterval(() => {
       turboModeCounter--;
+      document.querySelector('.turbo-seconds').textContent = turboModeCounter;
       if (turboModeCounter === 0) {
         turboModeEnabled = false;
         turboModeCounter = 10;
+        document.querySelector('#turbo-counter').className = 'hidden';
+        document.querySelector('.turbo-seconds').textContent = 10;
         clearInterval(turboModeTimer);
       }
     }, 1000);
