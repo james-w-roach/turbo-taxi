@@ -145,6 +145,7 @@ window.addEventListener('click', event => {
     document.querySelector('#car-blaster').className = 'car-blaster deactivated';
     document.querySelector('#ammo-counter').className = 'hidden';
     document.querySelector('#jump-counter').className = 'hidden';
+    document.querySelector('#blaster-help').className = 'hidden';
     document.querySelector('#new-hi-score').className = 'hidden';
 
     blasterAmmo = 5;
@@ -227,6 +228,7 @@ grantPowerup = powerup => {
     }, 1000);
     document.querySelector('#car-blaster').className = 'car-blaster';
     document.querySelector('#ammo-counter').className = 'ammo-counter';
+    document.querySelector('#blaster-help').className = 'blaster-help';
     blasterEnabled = true;
   } else if (powerup.includes('double-jump')) {
     const doubleJumpText = document.querySelector('#double-jump-text');
@@ -280,6 +282,7 @@ shootBlaster = () => {
           blasterEnabled = false;
           document.querySelector('#car-blaster').className = 'car-blaster deactivated';
           document.querySelector('#ammo-counter').className = 'hidden';
+          document.querySelector('#blaster-help').className = 'hidden';
           blasterAmmo = 5;
           document.querySelector('.ammo').textContent = 5;
           for (let i = 0; i < activePowerups.length; i++) {
