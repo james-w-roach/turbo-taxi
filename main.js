@@ -11,6 +11,7 @@ let falling = false;
 
 let jump;
 let fall;
+let fly;
 
 let firstObstacleInterval;
 let secondObstacleInterval;
@@ -30,6 +31,10 @@ let blastCount = 0;
 
 let doubleJumpEnabled = false;
 let secondJump = false;
+
+let turboModeEnabled = false;
+let turboModeTimer;
+let turboModeCounter = 10;
 
 activePowerups = [];
 
@@ -63,6 +68,9 @@ jumpCar = secondJumpPosition => {
   let direction = 'up';
   jumping = true;
   jump = setInterval(() => {
+    if (turboModeEnabled) {
+      clearInterval(jump);
+    }
     if (getComputedStyle(document.querySelector('.car')).bottom !== jumpTarget && direction === 'up') {
       document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) + 2) + 'px';
     } else if (getComputedStyle(document.querySelector('.car')).bottom > '0px' && direction === 'down') {
@@ -80,10 +88,44 @@ jumpCar = secondJumpPosition => {
   }, 4)
 }
 
+flyCar = () => {
+
+  fly = setInterval(() => {
+
+    const carTop = parseInt(getComputedStyle(document.querySelector('.car')).top.split('px')[0]);
+    const carBottom = parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]);
+
+    if (turboModeEnabled) {
+      if (carTop > 0 && turboDirection === 'up') {
+        document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) + 2) + 'px'
+      } else if (carBottom > 0 && turboDirection === 'down') {
+        document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) - 1) + 'px';
+      }
+    } else {
+      if (carBottom > 0) {
+        document.querySelector('.car').style.bottom = (parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]) - 1) + 'px';
+      } else {
+        clearInterval(fly);
+        for (let i = 0; i < activePowerups.length; i++) {
+          if (activePowerups[i] === 'turbo powerup') {
+            activePowerups.splice(i, 1);
+          }
+        }
+        startPowerupTimeout();
+      }
+    }
+  }, 4);
+}
+
 window.addEventListener('keydown', event => {
   if (event.code === 'Space') {
+
+    const carBottom = parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0])
+
     if (!gameOver) {
-      if (!jumping && !falling) {
+      if (turboModeEnabled) {
+        turboDirection = 'up';
+      } else if (!jumping && !falling && carBottom === 0) {
         jumpCar();
       } else if (doubleJumpEnabled) {
         if (!secondJump) {
@@ -118,6 +160,12 @@ window.addEventListener('keydown', event => {
     if (blasterEnabled) {
       shootBlaster();
     }
+  }
+});
+
+window.addEventListener('keyup', event => {
+  if (event.code === 'Space' && turboModeEnabled) {
+    turboDirection = 'down';
   }
 });
 
@@ -182,6 +230,7 @@ endGame = () => {
   }
   activePowerups = [];
   clearInterval(jump);
+  clearInterval(fly);
   clearInterval(firstObstacleInterval);
   clearInterval(secondObstacleInterval);
   clearInterval(scoreInterval);
@@ -191,8 +240,10 @@ endGame = () => {
   clearTimeout(addHardShapes);
   clearTimeout(powerupTimeout);
   clearInterval(blasterInterval);
+  clearInterval(turboModeTimer);
   blasterEnabled = false;
   doubleJumpEnabled = false;
+  turboModeEnabled = false;
   secondJump = false;
   document.querySelector('#game-over-modal').className = 'game-over-modal';
   document.querySelector('.game-over-score').textContent = 'Score: ' + score;
@@ -239,6 +290,18 @@ grantPowerup = powerup => {
     }, 1000);
     document.querySelector('#jump-counter').className = 'jump-counter';
     doubleJumpEnabled = true;
+  } else if (powerup.includes('turbo')) {
+    turboModeEnabled = true;
+    turboDirection = 'down';
+    flyCar();
+    turboModeTimer = setInterval(() => {
+      turboModeCounter--;
+      if (turboModeCounter === 0) {
+        turboModeEnabled = false;
+        turboModeCounter = 10;
+        clearInterval(turboModeTimer);
+      }
+    }, 1000);
   }
 
   activePowerups.push(powerup.split('obstacle ')[1]);
@@ -391,6 +454,7 @@ spawnObstacle = () => {
   block.className = 'obstacle ' + spawnlist[Math.floor(Math.random() * spawnlist.length)];
 
   if (block.className.includes('powerup')) {
+
     const powerupCenter = document.createElement('h1');
 
     const type = block.className.split('obstacle ')[1].split(' powerup')[0];
@@ -399,6 +463,8 @@ spawnObstacle = () => {
       powerupCenter.textContent = 'B';
     } else if (type === 'double-jump') {
       powerupCenter.textContent = 'D';
+    } else if (type === 'turbo') {
+      powerupCenter.textContent = 'T';
     }
 
     powerupCenter.className = `type-${type}`;
@@ -418,7 +484,7 @@ spawnObstacle = () => {
 
 startPowerupTimeout = () => {
   powerupTimeout = setTimeout(() => {
-    powerups = ['blaster powerup', 'double-jump powerup'];
+    powerups = ['blaster powerup', 'double-jump powerup', 'turbo powerup'];
 
     for (let i = 0; i < powerups.length; i++) {
       if (!spawnlist.includes(powerups[i]) && !activePowerups.includes(powerups[i])) {

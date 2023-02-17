@@ -413,6 +413,10 @@ body {
   border: solid thick orange;
 }
 
+.turbo {
+  border: solid thick rgb(255, 213, 0);
+}
+
 .type-blaster {
   font-size: 32px;
   color: rgb(73, 234, 9);
@@ -421,6 +425,11 @@ body {
 .type-double-jump {
   font-size: 32px;
   color: orange;
+}
+
+.type-turbo {
+  font-size: 32px;
+  color: rgb(255, 213, 0);
 }
 
 .car-blaster {
