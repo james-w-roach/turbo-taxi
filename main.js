@@ -137,6 +137,7 @@ window.addEventListener('keydown', event => {
             falling = false;
             clearInterval(fall);
           }
+          clearInterval(fly);
           jumpCar(parseInt(getComputedStyle(document.querySelector('.car')).bottom.split('px')[0]));
           jumps--;
           document.querySelector('.jumps').textContent = jumps;
@@ -199,6 +200,7 @@ window.addEventListener('click', event => {
 
     blasterAmmo = 5;
     jumps = 5;
+    turboModeCounter = 10;
     score = 0;
 
     document.querySelector('.ammo').textContent = 5;
@@ -292,6 +294,16 @@ grantPowerup = powerup => {
     document.querySelector('#jump-counter').className = 'jump-counter';
     doubleJumpEnabled = true;
   } else if (powerup.includes('turbo')) {
+    const turboText = document.querySelector('#turbo-text');
+    turboText.className = 'powerup-text activated';
+
+    setTimeout(() => {
+      turboText.className = 'powerup-text';
+    }, 1000);
+
+    document.querySelector('#wheel-left').className = 'wheel left flying';
+    document.querySelector('#wheel-right').className = 'wheel right flying';
+
     turboModeEnabled = true;
     document.querySelector('#turbo-counter').className = 'turbo-counter';
     turboDirection = 'down';
@@ -304,6 +316,8 @@ grantPowerup = powerup => {
         turboModeCounter = 10;
         document.querySelector('#turbo-counter').className = 'hidden';
         document.querySelector('.turbo-seconds').textContent = 10;
+        document.querySelector('#wheel-left').className = 'wheel left';
+        document.querySelector('#wheel-right').className = 'wheel right';
         clearInterval(turboModeTimer);
       }
     }, 1000);
