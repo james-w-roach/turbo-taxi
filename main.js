@@ -216,21 +216,25 @@ gapFall = obstacle => {
 }
 
 grantPowerup = powerup => {
+  const $car = document.querySelector('.car');
+
   if (powerup.includes('blaster')) {
-    document.querySelector('#blaster-pickup').className = 'pickup-title-container';
-    document.querySelector('#double-jump-pickup').className = 'hidden';
+    const blasterText = document.querySelector('#blaster-text');
+    blasterText.className = 'powerup-text activated';
+
     setTimeout(() => {
-      document.querySelector('#blaster-pickup').className = 'hidden';
-    }, 2000);
+      blasterText.className = 'powerup-text';
+    }, 1000);
     document.querySelector('#car-blaster').className = 'car-blaster';
     document.querySelector('#ammo-counter').className = 'ammo-counter';
     blasterEnabled = true;
   } else if (powerup.includes('double-jump')) {
-    document.querySelector('#double-jump-pickup').className = 'pickup-title-container';
-    document.querySelector('#blaster-pickup').className = 'hidden';
+    const doubleJumpText = document.querySelector('#double-jump-text');
+    doubleJumpText.className = 'powerup-text activated';
+
     setTimeout(() => {
-      document.querySelector('#double-jump-pickup').className = 'hidden';
-    }, 2000);
+      doubleJumpText.className = 'powerup-text';
+    }, 1000);
     document.querySelector('#jump-counter').className = 'jump-counter';
     doubleJumpEnabled = true;
   }
@@ -419,7 +423,7 @@ startPowerupTimeout = () => {
       }
     }
 
-  }, 15000);
+  }, 1000);
 }
 
 startGame = () => {

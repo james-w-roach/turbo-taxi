@@ -79,30 +79,26 @@ body {
   justify-content: center;
 }
 
-.pickup-title-container {
+.powerup-text {
   position: absolute;
-  width: 500px;
-  left: calc(50vw - 250px);
-  top: 30vh;
+  width: 140px;
   text-align: center;
+  top: -16px;
+  left: -10px;
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.2s;
 }
 
-.pickup-title {
-  color: white;
-  animation: blink 0.5s step-start infinite;
+.activated {
+  opacity: 1;
+  transform: translateY(-50px);
 }
 
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
+#blaster-text {
+  color: rgb(73, 234, 9)
 }
 
-.blaster-span {
-  color: rgb(73, 234, 9);
-}
-
-.dj-span {
+#double-jump-text {
   color: orange;
 }
 
