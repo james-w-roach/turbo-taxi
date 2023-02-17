@@ -197,6 +197,8 @@ window.addEventListener('click', event => {
     document.querySelector('#turbo-counter').className = 'hidden';
     document.querySelector('#blaster-help').className = 'hidden';
     document.querySelector('#new-hi-score').className = 'hidden';
+    document.querySelector('#wheel-left').className = 'wheel left';
+    document.querySelector('#wheel-right').className = 'wheel right';
 
     blasterAmmo = 5;
     jumps = 5;
@@ -393,7 +395,11 @@ moveObstacle = obstacle => {
     }
 
     if (getComputedStyle(obstacle).left !== '-350px') {
-      obstacle.style.left = (parseInt(getComputedStyle(obstacle).left.split('px')[0]) - 2) + 'px';
+      if (turboModeEnabled) {
+        obstacle.style.left = (parseInt(getComputedStyle(obstacle).left.split('px')[0]) - 3) + 'px';
+      } else {
+        obstacle.style.left = (parseInt(getComputedStyle(obstacle).left.split('px')[0]) - 2) + 'px';
+      }
     } else {
       // each obstacle is removed after leaving the player area
       if (obstacle.className.includes('powerup')) {
