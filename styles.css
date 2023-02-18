@@ -244,7 +244,7 @@ body {
   background-color: rgb(255, 213, 0);
   height: 25px;
   width: 50%;
-  margin: auto;
+  margin: 0 21%;
   transform: perspective(20px) rotateX(25deg);
 }
 
