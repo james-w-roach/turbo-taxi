@@ -438,13 +438,15 @@ moveObstacle = obstacle => {
         (rects[0].left >= obstacleRect.left) &&
         (rects[0].right <= obstacleRect.right) &&
         (rects[0].bottom >= obstacleRect.top)) {
-          if (rects[i].right >= obstacleRect.right || rects[i].bottom >= obstacleRect.bottom) {
-            clearInterval(move);
-            endGame();
-            break;
-          } else if (!falling && !jumping && !secondJump) {
-            falling = true;
-            gapFall(obstacle);
+          if (!turboModeEnabled) {
+            if (rects[i].right >= obstacleRect.right || rects[i].bottom >= obstacleRect.bottom) {
+              clearInterval(move);
+              endGame();
+              break;
+            } else if (!falling && !jumping && !secondJump) {
+              falling = true;
+              gapFall(obstacle);
+            }
           }
       }
     }
