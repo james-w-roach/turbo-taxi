@@ -196,6 +196,7 @@ window.addEventListener('click', event => {
     document.querySelector('#jump-counter').className = 'hidden';
     document.querySelector('#turbo-counter').className = 'hidden';
     document.querySelector('#blaster-help').className = 'hidden';
+    document.querySelector('#turbo-help').className = 'hidden';
     document.querySelector('#new-hi-score').className = 'hidden';
     document.querySelector('#wheel-left').className = 'wheel left';
     document.querySelector('#wheel-right').className = 'wheel right';
@@ -308,6 +309,7 @@ grantPowerup = powerup => {
 
     turboModeEnabled = true;
     document.querySelector('#turbo-counter').className = 'turbo-counter';
+    document.querySelector('#turbo-help').className = 'turbo-help';
     turboDirection = 'down';
     flyCar();
     turboModeTimer = setInterval(() => {
@@ -317,6 +319,7 @@ grantPowerup = powerup => {
         turboModeEnabled = false;
         turboModeCounter = 10;
         document.querySelector('#turbo-counter').className = 'hidden';
+        document.querySelector('#turbo-help').className = 'hidden';
         document.querySelector('.turbo-seconds').textContent = 10;
         document.querySelector('#wheel-left').className = 'wheel left';
         document.querySelector('#wheel-right').className = 'wheel right';

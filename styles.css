@@ -39,16 +39,20 @@ body {
   padding: 0 30px;
 }
 
-.blaster-help {
+.help-container {
   position: absolute;
+  right: 0;
+  top: 2px;
+}
+
+.blaster-help,
+.turbo-help {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 200px;
   height: 100px;
-  right: 0;
-  top: 2px;
   color: white;
   text-align: center;
 }
@@ -58,7 +62,13 @@ body {
   color: rgb(73, 234, 9);
 }
 
-.blaster-button {
+.turbo-help-header {
+  margin: 10px;
+  color: rgb(255, 213, 0);
+}
+
+.blaster-button,
+.turbo-button {
   display: flex;
   justify-content: center;
   align-items: center;
