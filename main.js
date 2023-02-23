@@ -23,9 +23,7 @@ let addHardShapes
 
 let scoreInterval;
 
-let powerupTimeout;
 let blasterInterval;
-
 let blasterEnabled = false;
 let blastCount = 0;
 
@@ -36,6 +34,13 @@ let turboModeEnabled = false;
 let turboModeTimer;
 let turboModeCounter = 10;
 
+let respawnInterval;
+const respawnTimers = {
+  blaster: 20,
+  "double-jump": 20,
+  turbo: 40
+}
+
 activePowerups = [];
 
 if (localStorage.getItem('Hi-Score')) {
@@ -43,7 +48,7 @@ if (localStorage.getItem('Hi-Score')) {
   document.querySelector('.hi-score').textContent = hiScore;
 }
 
-const spawnlist = ['block', 'low-wide block', 'floating block', 'gap'];
+const spawnList = ['block', 'low-wide block', 'floating block', 'gap'];
 
 jumpCar = secondJumpPosition => {
 
@@ -111,7 +116,7 @@ flyCar = () => {
             activePowerups.splice(i, 1);
           }
         }
-        startPowerupTimeout();
+        respawnTimers.turbo = 40;
       }
     }
   }, 4);
@@ -151,7 +156,7 @@ window.addEventListener('keydown', event => {
                 activePowerups.splice(i, 1);
               }
             }
-            startPowerupTimeout();
+            respawnTimers["double-jump"] = 20;
           }
         }
       }
@@ -206,6 +211,10 @@ window.addEventListener('click', event => {
     turboModeCounter = 10;
     score = 0;
 
+    respawnTimers.blaster = 20;
+    respawnTimers['double-jump'] = 20;
+    respawnTimers.turbo = 40;
+
     document.querySelector('.ammo').textContent = 5;
     document.querySelector('.jumps').textContent = 5;
     document.querySelector('.score').textContent = 0;
@@ -230,9 +239,9 @@ window.addEventListener('beforeunload', () => {
 endGame = () => {
   gameOver = true;
   jumping = false;
-  const obstacleOverflow = spawnlist.length - 4;
+  const obstacleOverflow = spawnList.length - 4;
   if (obstacleOverflow) {
-    spawnlist.splice((spawnlist.length - obstacleOverflow), obstacleOverflow);
+    spawnList.splice((spawnList.length - obstacleOverflow), obstacleOverflow);
   }
   activePowerups = [];
   clearInterval(jump);
@@ -247,6 +256,7 @@ endGame = () => {
   clearTimeout(powerupTimeout);
   clearInterval(blasterInterval);
   clearInterval(turboModeTimer);
+  clearInterval(respawnInterval);
   blasterEnabled = false;
   doubleJumpEnabled = false;
   turboModeEnabled = false;
@@ -377,7 +387,7 @@ shootBlaster = () => {
               activePowerups.splice(i, 1);
             }
           }
-          startPowerupTimeout();
+          respawnTimers.blaster = 20;
         }
       }
     }
@@ -406,7 +416,11 @@ moveObstacle = obstacle => {
     } else {
       // each obstacle is removed after leaving the player area
       if (obstacle.className.includes('powerup')) {
-        startPowerupTimeout();
+        const powerupName = obstacle.className.split(' powerup')[0];
+        powerupTime = powerupName === 'turbo'
+          ? 40
+          : 20;
+        respawnTimers[powerupName] = powerupTime;
       }
       document.querySelector('.player-area').removeChild(obstacle);
     }
@@ -481,7 +495,7 @@ spawnObstacle = () => {
   const $playerArea = document.querySelector('.player-area');
   const block = document.createElement('div');
 
-  block.className = 'obstacle ' + spawnlist[Math.floor(Math.random() * spawnlist.length)];
+  block.className = 'obstacle ' + spawnList[Math.floor(Math.random() * spawnList.length)];
 
   if (block.className.includes('powerup')) {
 
@@ -500,9 +514,9 @@ spawnObstacle = () => {
     powerupCenter.className = `type-${type}`;
     block.appendChild(powerupCenter);
 
-    for (let i = 0; i < spawnlist.length; i++) {
-      if (spawnlist[i] === block.className.split('obstacle ')[1]) {
-        spawnlist.splice(i, 1);
+    for (let i = 0; i < spawnList.length; i++) {
+      if (spawnList[i] === block.className.split('obstacle ')[1]) {
+        spawnList.splice(i, 1);
       }
     }
   }
@@ -510,19 +524,6 @@ spawnObstacle = () => {
   $playerArea.appendChild(block);
 
   moveObstacle(block);
-}
-
-startPowerupTimeout = () => {
-  powerupTimeout = setTimeout(() => {
-    powerups = ['blaster powerup', 'double-jump powerup', 'turbo powerup'];
-
-    for (let i = 0; i < powerups.length; i++) {
-      if (!spawnlist.includes(powerups[i]) && !activePowerups.includes(powerups[i])) {
-        spawnlist.push(powerups[i]);
-      }
-    }
-
-  }, 1000);
 }
 
 startGame = () => {
@@ -565,21 +566,29 @@ startGame = () => {
   // more shapes are added at different points in the game to increase difficulty
 
   addEasyShapes = setTimeout(() => {
-    spawnlist.push('wide gap');
-    spawnlist.push('medium-wide block');
+    spawnList.push('wide gap');
+    spawnList.push('medium-wide block');
   }, 20000)
 
   addMediumShapes = setTimeout(() => {
-    spawnlist.push('tall block');
-    spawnlist.push('tall-wide block');
-    spawnlist.push('wider gap');
+    spawnList.push('tall block');
+    spawnList.push('tall-wide block');
+    spawnList.push('wider gap');
   }, 40000)
 
   addHardShapes = setTimeout(() => {
-    spawnlist.push('wide-floating block');
-    spawnlist.push('mid floating block');
-    spawnlist.push('taller block');
+    spawnList.push('wide-floating block');
+    spawnList.push('mid floating block');
+    spawnList.push('taller block');
   }, 60000)
 
-  startPowerupTimeout();
+  respawnInterval = setInterval(() => {
+    for(let key in respawnTimers) {
+      if (respawnTimers[key] === 0 && !spawnList.includes(key + ' powerup') && !activePowerups.includes(key + ' powerup') && !document.querySelector(`.obstacle.${key}.powerup`)) {
+        spawnList.push(key + ' powerup');
+      } else if (respawnTimers[key] > 0) {
+        respawnTimers[key]--;
+      }
+    }
+  }, 1000);
 }
