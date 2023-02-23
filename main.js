@@ -533,7 +533,11 @@ startGame = () => {
   }
 
   scoreInterval = setInterval(() => {
-    score++;
+    if (turboModeEnabled) {
+      score = score + 2;
+    } else {
+      score++;
+    }
 
     document.querySelector('.score').textContent = score;
 
