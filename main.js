@@ -253,7 +253,6 @@ endGame = () => {
   clearTimeout(addEasyShapes);
   clearTimeout(addMediumShapes);
   clearTimeout(addHardShapes);
-  clearTimeout(powerupTimeout);
   clearInterval(blasterInterval);
   clearInterval(turboModeTimer);
   clearInterval(respawnInterval);
