@@ -16,6 +16,20 @@
         <h2>to jump.</h2>
       </div>
     </div>
+    <div class="powerup-instructions">
+      <h2>Keep an eye out for POWERUPS.</h2>
+      <div class="powerup-container">
+        <div class="turbo powerup-logo">
+          <h1 class="type-turbo">T</h1>
+        </div>
+        <div class="blaster powerup-logo">
+          <h1 class="type-blaster">B</h1>
+        </div>
+        <div class="double-jump powerup-logo">
+          <h1 class="type-double-jump">D</h1>
+        </div>
+      </div>
+    </div>
     <div id="game-over-modal" class="hidden">
       <h2 class="game-over-header">GAME OVER</h2>
       <h3 class="hidden" id="new-hi-score">NEW HIGH SCORE!</h3>
@@ -30,8 +44,39 @@
       <h3 class="score-header">HI-SCORE</h3>
       <h3 class="hi-score">0</h3>
     </div>
+    <div class="powerup-counter-container">
+      <div id="ammo-counter" class="hidden">
+        <h3 class="ammo-header">AMMO</h3>
+        <h3 class="ammo">5</h3>
+      </div>
+      <div id="jump-counter" class="hidden">
+        <h3 class="jump-header">JUMPS</h3>
+        <h3 class="jumps">5</h3>
+      </div>
+      <div id="turbo-counter" class="hidden">
+        <h3 class="turbo-header">TURBO</h3>
+        <h3 class="turbo-seconds">10</h3>
+      </div>
+    </div>
+    <div class="help-container">
+      <div id="blaster-help" class="hidden">
+        <h3 class="blaster-help-header">BLASTER</h3>
+        <div class="blaster-button">
+          <h3 class="blaster-button-text">ENTER</h3>
+        </div>
+      </div>
+      <div id="turbo-help" class="hidden">
+        <h3 class="turbo-help-header">FLIGHT</h3>
+        <div class="turbo-button">
+          <h3 class="turbo-button-text">HOLD SPACE</h3>
+        </div>
+      </div>
+    </div>
     <div class="player-area">
       <div class="car">
+        <h3 id="blaster-text" class="powerup-text">BLASTER</h3>
+        <h3 id="double-jump-text" class="powerup-text">DOUBLE JUMP</h3>
+        <h3 id="turbo-text" class="powerup-text">TURBO</h3>
         <div class="car-top">
           <div class="windows">
             <div class="window"></div>
@@ -43,9 +88,10 @@
           <div class="taillight"></div>
         </div>
         <div class="wheels">
-          <div class="wheel left"></div>
-          <div class="wheel right"></div>
+          <div id="wheel-left" class="wheel left"></div>
+          <div id="wheel-right" class="wheel right"></div>
         </div>
+        <div id="car-blaster" class="car-blaster deactivated"></div>
       </div>
     </div>
     <div class="ground"></div>
