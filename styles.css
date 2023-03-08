@@ -27,6 +27,7 @@ body {
   text-align: center;
   color: white;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 2;
 }
 
 .powerup-counter-container {
@@ -43,6 +44,7 @@ body {
   position: absolute;
   right: 0;
   top: 2px;
+  z-index: 2;
 }
 
 .blaster-help,
@@ -117,6 +119,7 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
   transition: opacity 0.3s ease-in-out;
+  z-index: 2;
 }
 
 .jump-instructions {
@@ -344,6 +347,47 @@ body {
   width: 100%;
 }
 
+.background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 80%;
+  width: 100%;
+}
+
+.building {
+  background-color: rgb(9, 74, 111);
+  width: 100px;
+  position: absolute;
+  bottom: 0;
+  right: -100px;
+  z-index: 0;
+}
+
+.shorter {
+  height: 150px;
+}
+
+.short {
+  height: 200px;
+}
+
+.regular {
+  height: 250px;
+}
+
+.large {
+  height: 350px;
+}
+
+.larger {
+  height: 425px;
+}
+
+.skyscraper {
+  height: 475px;
+}
+
 .block {
   width: 50px;
   height: 50px;
@@ -405,7 +449,7 @@ body {
   width: 200px;
   height: 100px;
   z-index: 9;
-  background-color: rgb(25, 160, 232);
+  background-color: rgb(9, 74, 111);
   position: absolute;
   left: 100vw;
 }

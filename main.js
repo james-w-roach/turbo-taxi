@@ -41,6 +41,8 @@ const respawnTimers = {
   turbo: 40
 }
 
+let buildingInterval;
+
 activePowerups = [];
 
 if (localStorage.getItem('Hi-Score')) {
@@ -226,6 +228,8 @@ window.addEventListener('click', event => {
     }
     blastCount = 0;
 
+    animateBackground();
+
     startGame();
   }
 });
@@ -256,6 +260,7 @@ endGame = () => {
   clearInterval(blasterInterval);
   clearInterval(turboModeTimer);
   clearInterval(respawnInterval);
+  clearInterval(buildingInterval);
   blasterEnabled = false;
   doubleJumpEnabled = false;
   turboModeEnabled = false;
@@ -524,6 +529,35 @@ spawnObstacle = () => {
 
   moveObstacle(block);
 }
+
+animateBackground = () => {
+  const $buildingsContainer = document.querySelector('.buildings-container');
+
+  const buildings = ['shorter', 'short', 'regular', 'large', 'larger', 'skyscraper'];
+
+  addBuilding = () => {
+    const building = document.createElement('div');
+    building.className = 'building ' + buildings[Math.floor(Math.random() * buildings.length)];
+    $buildingsContainer.appendChild(building);
+  }
+
+  buildingInterval = setInterval(() => {
+    if (!$buildingsContainer.children[0]) {
+      addBuilding();
+    } else {
+      for (let i = 0; i < $buildingsContainer.children.length; i++) {
+        $buildingsContainer.children[i].style.left = (parseInt(getComputedStyle($buildingsContainer.children[i]).left.split('px')[0]) - 1) + 'px';
+        if (i === ($buildingsContainer.children.length - 1) && parseInt(getComputedStyle($buildingsContainer.children[i]).left.split('px')[0]) === (window.innerWidth - 100)) {
+          addBuilding();
+        } else if ($buildingsContainer.children[i].style.left === '-100px') {
+          $buildingsContainer.children[i].remove();
+        }
+      }
+    }
+  }, 4);
+}
+
+animateBackground();
 
 startGame = () => {
 
