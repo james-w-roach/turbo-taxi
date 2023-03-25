@@ -45,8 +45,14 @@ let buildingInterval;
 
 activePowerups = [];
 
-if (localStorage.getItem('Hi-Score')) {
-  hiScore = JSON.parse(localStorage.getItem('Hi-Score'));
+let hiScores = [];
+
+if (localStorage.getItem('Hi-Scores') && localStorage.getItem('Hi-Scores')[0]) {
+  hiScores = JSON.parse(localStorage.getItem('Hi-Scores'));
+}
+
+if (hiScores[0]) {
+  hiScore = hiScores[0];
   document.querySelector('.hi-score').textContent = hiScore;
 }
 
@@ -235,8 +241,8 @@ window.addEventListener('click', event => {
 });
 
 window.addEventListener('beforeunload', () => {
-  if (hiScore) {
-    localStorage.setItem('Hi-Score', JSON.stringify(hiScore));
+  if (hiScores[0]) {
+    localStorage.setItem('Hi-Scores', JSON.stringify(hiScores));
   }
 });
 
@@ -268,11 +274,26 @@ endGame = () => {
   document.querySelector('#game-over-modal').className = 'game-over-modal';
   document.querySelector('.game-over-score').textContent = 'Score: ' + score;
   if (newHiScore) {
-    const hiScoreJSON = JSON.stringify(hiScore);
-    localStorage.setItem('Hi-Score', hiScoreJSON);
+    hiScores.unshift(score);
+    if (hiScores.length > 10) {
+      hiScores.pop();
+    }
+    hiScore = hiScores[0];
     document.querySelector('#new-hi-score').className = 'new-hi-score';
     newHiScore = false;
+  } else {
+    for (let i = 0; i < hiScores.length; i++) {
+      if (score >= hiScores[i]) {
+        hiScores.splice(i, 0, score);
+        if (hiScores.length > 10) {
+          hiScores.pop();
+        }
+        break;
+      }
+    }
   }
+  const hiScoresJSON = JSON.stringify(hiScores);
+  localStorage.setItem('Hi-Scores', hiScoresJSON);
 }
 
 gapFall = obstacle => {
@@ -577,7 +598,6 @@ startGame = () => {
 
     if (score > hiScore) {
       newHiScore = true;
-      hiScore = score;
       document.querySelector('.hi-score').textContent = score;
     }
   }, 200);
