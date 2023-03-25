@@ -121,6 +121,9 @@ body {
   top: 25vh;
   opacity: 0;
   color: white;
+  background-color: black;
+  border-radius: 1rem;
+  padding: 30px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
   transition: opacity 0.3s ease-in-out;

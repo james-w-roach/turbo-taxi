@@ -183,6 +183,7 @@ window.addEventListener('click', event => {
     document.querySelector('.instructions').style.opacity = '1';
     setTimeout(() => {
       document.querySelector('.instructions').style.opacity = '0';
+      startGame();
       setTimeout(() => {
         document.querySelector('.powerup-instructions').style.opacity = '1';
         setTimeout(() => {
@@ -190,7 +191,6 @@ window.addEventListener('click', event => {
         }, 5000);
       }, 1000);
     }, 5000);
-    startGame();
   } else if (event.target.className === 'start-over') {
     gameOver = false;
 
