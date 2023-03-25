@@ -197,7 +197,8 @@ body {
 }
 
 .start-modal,
-.game-over-modal {
+.game-over-modal,
+.scores-modal {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -213,6 +214,11 @@ body {
   font-family: 'Mont Heavy', sans-serif;
   z-index: 10;
   padding-bottom: 10px;
+}
+
+.scores-modal {
+  display: block;
+  padding: 30px;
 }
 
 .start-header,
@@ -260,8 +266,51 @@ body {
   border-radius: 1rem;
 }
 
+.scores-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.scores-header {
+  padding-top: 5px;
+  font-size: 24px;
+  margin: 0;
+}
+
+.menu-button {
+  font-family: 'Mont Heavy', sans-serif;
+  font-size: 16px;
+  background-color: rgb(255, 213, 0);
+  transition: background-color 0.3s;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 8px 10px 5px;
+}
+
+.scores-list {
+  margin: 30px 0;
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 2fr);
+}
+
+.scores-list-item {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.no-scores-found {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 24px;
+}
+
 .start-button:hover,
 .scores-button:hover,
+.menu-button:hover,
 .start-over:hover {
   cursor: pointer;
   background-color: white;

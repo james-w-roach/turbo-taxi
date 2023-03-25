@@ -237,6 +237,37 @@ window.addEventListener('click', event => {
     animateBackground();
 
     startGame();
+  } else if (event.target.className === 'scores-button') {
+    document.querySelector('#start-modal').className = 'hidden';
+    document.querySelector('#scores-modal').className = 'scores-modal';
+
+    const $scoresList = document.querySelector('.scores-list');
+
+    if (hiScores[0]) {
+      hiScores.map((score, index) => {
+        const $scoresListItem = document.createElement('li');
+        $scoresListItem.className = 'scores-list-item';
+        $scoresListItem.textContent = (index + 1) + '.   ' + score;
+        $scoresList.appendChild($scoresListItem);
+      });
+    } else {
+      const $scoresModal = document.querySelector('#scores-modal');
+      const $noScores = document.createElement('h3');
+      $noScores.className = 'no-scores-found';
+      $noScores.textContent = 'NO HI-SCORES FOUND';
+      $scoresModal.appendChild($noScores);
+    }
+  } else if (event.target.className === 'menu-button') {
+    document.querySelector('#start-modal').className = 'start-modal';
+    document.querySelector('#scores-modal').className = 'hidden';
+
+    while (document.querySelector('.scores-list').children.length) {
+      document.querySelector('.scores-list').children[0].remove();
+    }
+
+    if (document.querySelector('.no-scores-found')) {
+      document.querySelector('.no-scores-found').remove();
+    }
   }
 });
 
