@@ -186,6 +186,8 @@ window.addEventListener('keyup', event => {
 window.addEventListener('click', event => {
   if (event.target.className === 'start-button') {
     document.querySelector('.start-modal').remove();
+    document.querySelector('#score-container').className = 'score-container';
+    document.querySelector('#hi-score-container').className = 'hi-score-container';
     document.querySelector('.instructions').style.opacity = '1';
     setTimeout(() => {
       document.querySelector('.instructions').style.opacity = '0';
