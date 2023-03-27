@@ -304,6 +304,7 @@ endGame = () => {
   secondJump = false;
   document.querySelector('#game-over-modal').className = 'game-over-modal';
   document.querySelector('.game-over-score').textContent = 'Score: ' + score;
+
   if (newHiScore) {
     hiScores.unshift(score);
     if (hiScores.length > 10) {
@@ -319,6 +320,10 @@ endGame = () => {
         if (hiScores.length > 10) {
           hiScores.pop();
         }
+        break;
+      }
+      if (i === hiScores.length - 1 && hiScores.length < 10) {
+        hiScores.push(score);
         break;
       }
     }
