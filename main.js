@@ -185,7 +185,7 @@ window.addEventListener('keyup', event => {
 
 window.addEventListener('click', event => {
   if (event.target.className === 'start-button') {
-    document.querySelector('.start-modal').remove();
+    document.querySelector('.main-menu').remove();
     document.querySelector('#score-container').className = 'score-container';
     document.querySelector('#hi-score-container').className = 'hi-score-container';
     document.querySelector('.instructions').style.opacity = '1';
@@ -240,7 +240,7 @@ window.addEventListener('click', event => {
 
     startGame();
   } else if (event.target.className === 'scores-button') {
-    document.querySelector('#start-modal').className = 'hidden';
+    document.querySelector('#main-menu').className = 'hidden';
     document.querySelector('#scores-modal').className = 'scores-modal';
 
     const $scoresList = document.querySelector('.scores-list');
@@ -259,16 +259,25 @@ window.addEventListener('click', event => {
       $noScores.textContent = 'NO HI-SCORES FOUND';
       $scoresModal.appendChild($noScores);
     }
+  } else if (event.target.className === 'help-button') {
+    document.querySelector('#main-menu').className = 'hidden';
+    document.querySelector('#help-modal').className = 'help-modal';
   } else if (event.target.className === 'menu-button') {
-    document.querySelector('#start-modal').className = 'start-modal';
-    document.querySelector('#scores-modal').className = 'hidden';
 
-    while (document.querySelector('.scores-list').children.length) {
-      document.querySelector('.scores-list').children[0].remove();
-    }
+    document.querySelector('#main-menu').className = 'main-menu';
 
-    if (document.querySelector('.no-scores-found')) {
-      document.querySelector('.no-scores-found').remove();
+    if (document.querySelector('#scores-modal').className !== 'hidden') {
+      document.querySelector('#scores-modal').className = 'hidden';
+
+      while (document.querySelector('.scores-list').children.length) {
+        document.querySelector('.scores-list').children[0].remove();
+      }
+
+      if (document.querySelector('.no-scores-found')) {
+        document.querySelector('.no-scores-found').remove();
+      }
+    } else if (document.querySelector('#help-modal').className !== 'hidden') {
+      document.querySelector('#help-modal').className = 'hidden';
     }
   }
 });
