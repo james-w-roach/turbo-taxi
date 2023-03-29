@@ -151,15 +151,18 @@ body {
   transform: translateY(-50px);
 }
 
-#blaster-text {
+#blaster-text,
+.blaster-span {
   color: rgb(73, 234, 9)
 }
 
-#double-jump-text {
+#double-jump-text,
+.double-jump-span {
   color: rgb(183, 30, 239);
 }
 
-#turbo-text {
+#turbo-text,
+.turbo-span {
   color: rgb(255, 213, 0);
 }
 
