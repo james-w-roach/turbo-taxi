@@ -92,7 +92,7 @@ body {
 }
 
 .jump-counter {
-  color: orange;
+  color: rgb(183, 30, 239);
 }
 
 .turbo-counter {
@@ -156,7 +156,7 @@ body {
 }
 
 #double-jump-text {
-  color: orange;
+  color: rgb(183, 30, 239);
 }
 
 #turbo-text {
@@ -626,7 +626,7 @@ body {
 }
 
 .double-jump {
-  border: solid thick orange;
+  border: solid thick rgb(183, 30, 239);
 }
 
 .turbo {
@@ -640,7 +640,7 @@ body {
 
 .type-double-jump {
   font-size: 32px;
-  color: orange;
+  color: rgb(183, 30, 239);
 }
 
 .type-turbo {
