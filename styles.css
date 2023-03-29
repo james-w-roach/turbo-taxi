@@ -306,7 +306,8 @@ body {
 
 .start-button,
 .scores-button,
-.start-over {
+.start-over,
+.main-menu-button {
   font-family: 'Mont Heavy', sans-serif;
   font-size: 24px;
   padding-top: 8px;
@@ -364,23 +365,30 @@ body {
 .scores-button:hover,
 .help-button:hover,
 .menu-button:hover,
-.start-over:hover {
+.start-over:hover,
+.main-menu-button:hover {
   cursor: pointer;
   background-color: white;
   color: black;
 }
 
+.start-over,
+.main-menu-button {
+  width: 220px;
+}
+
 .start-over {
-  width: 180px;
+  margin-bottom: 10px;
 }
 
 .game-over-modal {
-  padding-bottom: 20px;
+  height: unset;
+  padding: 40px;
 }
 
 .game-over-header {
   font-size: 34px;
-  margin-bottom: 20px;
+  margin: 0 0 20px;
 }
 
 .game-over-score {

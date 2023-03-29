@@ -185,7 +185,7 @@ window.addEventListener('keyup', event => {
 
 window.addEventListener('click', event => {
   if (event.target.className === 'start-button') {
-    document.querySelector('.main-menu').remove();
+    document.querySelector('.main-menu').className = 'hidden';
     document.querySelector('#score-container').className = 'score-container';
     document.querySelector('#hi-score-container').className = 'hi-score-container';
     document.querySelector('.instructions').style.opacity = '1';
@@ -199,7 +199,7 @@ window.addEventListener('click', event => {
         }, 5000);
       }, 1000);
     }, 5000);
-  } else if (event.target.className === 'start-over') {
+  } else if (event.target.className === 'start-over' || event.target.className === 'main-menu-button') {
     gameOver = false;
 
     document.querySelector('.car').style.bottom = '0px';
@@ -238,7 +238,14 @@ window.addEventListener('click', event => {
 
     animateBackground();
 
-    startGame();
+    if (event.target.className === 'start-over') {
+      startGame();
+    } else {
+      document.querySelector('#game-over-modal').className = 'hidden';
+      document.querySelector('#main-menu').className = 'main-menu';
+      document.querySelector('#score-container').className = 'hidden';
+      document.querySelector('#hi-score-container').className = 'hidden';
+    }
   } else if (event.target.className === 'scores-button') {
     document.querySelector('#main-menu').className = 'hidden';
     document.querySelector('#scores-modal').className = 'scores-modal';
