@@ -64,6 +64,12 @@ jumpCar = secondJumpPosition => {
   let fallSpeed = 1;
 
   if (secondJumpPosition) {
+    document.querySelector('#wheel-left').className = 'wheel left dj-active';
+    document.querySelector('#wheel-right').className = 'wheel right dj-active';
+    setTimeout(() => {
+      document.querySelector('#wheel-left').className = 'wheel left';
+      document.querySelector('#wheel-right').className = 'wheel right';
+    }, 200);
     secondJumpPosition = Math.floor(secondJumpPosition + 100);
     if (secondJumpPosition % 2) {
       secondJumpPosition++;

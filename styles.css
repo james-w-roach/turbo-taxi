@@ -481,7 +481,11 @@ body {
   background-color: black;
   top: -10px;
   z-index: 3;
-  transition: border-radius 0.3s, height  0.3s, top 0.3s;
+  transition: border-radius 0.3s, height  0.3s, top 0.3s, background-color 0.2s;
+}
+
+.dj-active {
+  background-color: rgb(183, 30, 239);
 }
 
 .flying {
