@@ -209,17 +209,17 @@ body {
 }
 
 .start-modal {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 300px;
   height: 280px;
   color: rgb(255, 213, 0);
   background-color: black;
   border-radius: 1rem;
   font-family: 'Mont Heavy', sans-serif;
-  padding-bottom: 10px;
+  padding: 35px 30px 30px;
+}
+
+.start-modal-title {
+  width: 100%;
 }
 
 .help-button {
@@ -273,35 +273,15 @@ body {
   color: white;
 }
 
-.start-header,
-.start-subheader {
-  position: absolute;
-  margin: 0;
-  font-size: 62px;
-}
-
-.start-header {
-  top: 30px;
-  left: 40px;
-}
-
-.start-subheader {
-  left: 19.5px;
-  top: 90px;
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  text-align: center;
-}
-
 .start-buttons {
   position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 160px;
-  height: 130px;
-  bottom: 42px;
-  right: 40px;
+  width: 164px;
+  height: 140px;
+  bottom: 34px;
+  right: 34px;
 }
 
 .start-button,
@@ -317,6 +297,11 @@ body {
   transition: background-color 0.3s;
   border: none;
   border-radius: 1rem;
+}
+
+.start-button,
+.scores-button {
+  height: 60px;
 }
 
 .scores-header-container {
