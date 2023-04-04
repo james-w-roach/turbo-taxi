@@ -4,6 +4,10 @@
 
 Turbo Taxi is a side-scrolling platformer inspired by the Google Dino Game & the Impossible Game. The goal is to avoid crashing into obstacles and falling into gaps in order to survive as long as possible. The longer you survive, the more points you will earn.
 
+## LINK
+
+Click here to play: https://james-w-roach.github.io/turbo-taxi/
+
 ## POWERUPS
 
 TURBO TAXI has 3 main powerups that will help you survive longer.
