@@ -41,10 +41,18 @@ const respawnTimers = {
   turbo: 40
 }
 
+let buildingInterval;
+
 activePowerups = [];
 
-if (localStorage.getItem('Hi-Score')) {
-  hiScore = JSON.parse(localStorage.getItem('Hi-Score'));
+let hiScores = [];
+
+if (localStorage.getItem('Hi-Scores') && localStorage.getItem('Hi-Scores')[0]) {
+  hiScores = JSON.parse(localStorage.getItem('Hi-Scores'));
+}
+
+if (hiScores[0]) {
+  hiScore = hiScores[0];
   document.querySelector('.hi-score').textContent = hiScore;
 }
 
@@ -56,6 +64,12 @@ jumpCar = secondJumpPosition => {
   let fallSpeed = 1;
 
   if (secondJumpPosition) {
+    document.querySelector('#wheel-left').className = 'wheel left dj-active';
+    document.querySelector('#wheel-right').className = 'wheel right dj-active';
+    setTimeout(() => {
+      document.querySelector('#wheel-left').className = 'wheel left';
+      document.querySelector('#wheel-right').className = 'wheel right';
+    }, 200);
     secondJumpPosition = Math.floor(secondJumpPosition + 100);
     if (secondJumpPosition % 2) {
       secondJumpPosition++;
@@ -177,10 +191,13 @@ window.addEventListener('keyup', event => {
 
 window.addEventListener('click', event => {
   if (event.target.className === 'start-button') {
-    document.querySelector('.start-modal').remove();
+    document.querySelector('.main-menu').className = 'hidden';
+    document.querySelector('#score-container').className = 'score-container';
+    document.querySelector('#hi-score-container').className = 'hi-score-container';
     document.querySelector('.instructions').style.opacity = '1';
     setTimeout(() => {
       document.querySelector('.instructions').style.opacity = '0';
+      startGame();
       setTimeout(() => {
         document.querySelector('.powerup-instructions').style.opacity = '1';
         setTimeout(() => {
@@ -188,8 +205,7 @@ window.addEventListener('click', event => {
         }, 5000);
       }, 1000);
     }, 5000);
-    startGame();
-  } else if (event.target.className === 'start-over') {
+  } else if (event.target.className === 'start-over' || event.target.className === 'main-menu-button') {
     gameOver = false;
 
     document.querySelector('.car').style.bottom = '0px';
@@ -226,13 +242,62 @@ window.addEventListener('click', event => {
     }
     blastCount = 0;
 
-    startGame();
+    animateBackground();
+
+    if (event.target.className === 'start-over') {
+      startGame();
+    } else {
+      document.querySelector('#game-over-modal').className = 'hidden';
+      document.querySelector('#main-menu').className = 'main-menu';
+      document.querySelector('#score-container').className = 'hidden';
+      document.querySelector('#hi-score-container').className = 'hidden';
+    }
+  } else if (event.target.className === 'scores-button') {
+    document.querySelector('#main-menu').className = 'hidden';
+    document.querySelector('#scores-modal').className = 'scores-modal';
+
+    const $scoresList = document.querySelector('.scores-list');
+
+    if (hiScores[0]) {
+      hiScores.map((score, index) => {
+        const $scoresListItem = document.createElement('li');
+        $scoresListItem.className = 'scores-list-item';
+        $scoresListItem.textContent = (index + 1) + '.   ' + score;
+        $scoresList.appendChild($scoresListItem);
+      });
+    } else {
+      const $scoresModal = document.querySelector('#scores-modal');
+      const $noScores = document.createElement('h3');
+      $noScores.className = 'no-scores-found';
+      $noScores.textContent = 'NO HI-SCORES FOUND';
+      $scoresModal.appendChild($noScores);
+    }
+  } else if (event.target.className === 'help-button') {
+    document.querySelector('#main-menu').className = 'hidden';
+    document.querySelector('#help-modal').className = 'help-modal';
+  } else if (event.target.className === 'menu-button') {
+
+    document.querySelector('#main-menu').className = 'main-menu';
+
+    if (document.querySelector('#scores-modal').className !== 'hidden') {
+      document.querySelector('#scores-modal').className = 'hidden';
+
+      while (document.querySelector('.scores-list').children.length) {
+        document.querySelector('.scores-list').children[0].remove();
+      }
+
+      if (document.querySelector('.no-scores-found')) {
+        document.querySelector('.no-scores-found').remove();
+      }
+    } else if (document.querySelector('#help-modal').className !== 'hidden') {
+      document.querySelector('#help-modal').className = 'hidden';
+    }
   }
 });
 
 window.addEventListener('beforeunload', () => {
-  if (hiScore) {
-    localStorage.setItem('Hi-Score', JSON.stringify(hiScore));
+  if (hiScores[0]) {
+    localStorage.setItem('Hi-Scores', JSON.stringify(hiScores));
   }
 });
 
@@ -256,18 +321,39 @@ endGame = () => {
   clearInterval(blasterInterval);
   clearInterval(turboModeTimer);
   clearInterval(respawnInterval);
+  clearInterval(buildingInterval);
   blasterEnabled = false;
   doubleJumpEnabled = false;
   turboModeEnabled = false;
   secondJump = false;
   document.querySelector('#game-over-modal').className = 'game-over-modal';
   document.querySelector('.game-over-score').textContent = 'Score: ' + score;
+
   if (newHiScore) {
-    const hiScoreJSON = JSON.stringify(hiScore);
-    localStorage.setItem('Hi-Score', hiScoreJSON);
+    hiScores.unshift(score);
+    if (hiScores.length > 10) {
+      hiScores.pop();
+    }
+    hiScore = hiScores[0];
     document.querySelector('#new-hi-score').className = 'new-hi-score';
     newHiScore = false;
+  } else {
+    for (let i = 0; i < hiScores.length; i++) {
+      if (score >= hiScores[i]) {
+        hiScores.splice(i, 0, score);
+        if (hiScores.length > 10) {
+          hiScores.pop();
+        }
+        break;
+      }
+      if (i === hiScores.length - 1 && hiScores.length < 10) {
+        hiScores.push(score);
+        break;
+      }
+    }
   }
+  const hiScoresJSON = JSON.stringify(hiScores);
+  localStorage.setItem('Hi-Scores', hiScoresJSON);
 }
 
 gapFall = obstacle => {
@@ -525,6 +611,35 @@ spawnObstacle = () => {
   moveObstacle(block);
 }
 
+animateBackground = () => {
+  const $buildingsContainer = document.querySelector('.buildings-container');
+
+  const buildings = ['shorter', 'short', 'regular', 'large', 'larger', 'skyscraper'];
+
+  addBuilding = () => {
+    const building = document.createElement('div');
+    building.className = 'building ' + buildings[Math.floor(Math.random() * buildings.length)];
+    $buildingsContainer.appendChild(building);
+  }
+
+  buildingInterval = setInterval(() => {
+    if (!$buildingsContainer.children[0]) {
+      addBuilding();
+    } else {
+      for (let i = 0; i < $buildingsContainer.children.length; i++) {
+        $buildingsContainer.children[i].style.left = (parseInt(getComputedStyle($buildingsContainer.children[i]).left.split('px')[0]) - 1) + 'px';
+        if (i === ($buildingsContainer.children.length - 1) && parseInt(getComputedStyle($buildingsContainer.children[i]).left.split('px')[0]) === (window.innerWidth - 100)) {
+          addBuilding();
+        } else if ($buildingsContainer.children[i].style.left === '-100px') {
+          $buildingsContainer.children[i].remove();
+        }
+      }
+    }
+  }, 4);
+}
+
+animateBackground();
+
 startGame = () => {
 
   if (falling) {
@@ -543,7 +658,6 @@ startGame = () => {
 
     if (score > hiScore) {
       newHiScore = true;
-      hiScore = score;
       document.querySelector('.hi-score').textContent = score;
     }
   }, 200);

@@ -4,9 +4,40 @@
 </head>
 <body>
   <div class="screen">
-    <div class="start-modal">
-      <h2 class="start-header">TURBO TAXI</h2>
-      <button class="start-button">START</button>
+    <div class="main-menu" id="main-menu">
+      <div class="start-modal" id="start-modal">
+        <img class="start-modal-title" src="./images/TT-logo.png" />
+        <div class="start-buttons">
+          <button class="start-button">START</button>
+          <button class="scores-button">SCORES</button>
+        </div>
+      </div>
+      <button class="help-button" id="help-button">HELP & CONTROLS</button>
+    </div>
+    <div class="hidden" id="scores-modal">
+      <div class="scores-header-container">
+        <h3 class="scores-header">HI-SCORES</h3>
+        <button class="menu-button">MENU</button>
+      </div>
+      <ul class="scores-list">
+
+      </ul>
+    </div>
+    <div class="hidden" id="help-modal">
+      <div class="scores-header-container">
+        <h3 class="scores-header">GAME HELP</h3>
+        <button class="menu-button">MENU</button>
+      </div>
+      <div class="help-text">
+        <h3 style="color:rgb(255, 213, 0)">BASICS</h3>
+        <p>Avoid obstacles and gaps to survive.</p>
+        <p>The longer you survive, the more points you will earn.</p>
+        <h3 style="color:rgb(255, 213, 0)">CONTROLS</h3>
+        <p>JUMP: SPACE BAR</p>
+        <p><span class="blaster-span">BLASTER:</span> ENTER OR RETURN</p>
+        <p><span class="double-jump-span">DOUBLE JUMP:</span> PRESS SPACE IN MID-AIR</p>
+        <p style="margin-bottom: 0"><span class="turbo-span">TURBO:</span> HOLD SPACE TO FLY</p>
+      </div>
     </div>
     <div class="instructions">
       <h2>Avoid the blocks and gaps to survive!</h2>
@@ -35,12 +66,13 @@
       <h3 class="hidden" id="new-hi-score">NEW HIGH SCORE!</h3>
       <h3 class="game-over-score"></h3>
       <button class="start-over">START OVER</button>
+      <button class="main-menu-button">MAIN MENU</button>
     </div>
-    <div class="score-container">
+    <div id="score-container" class="hidden">
       <h3 class="score-header">SCORE</h3>
       <h3 class="score">0</h3>
     </div>
-    <div class="hi-score-container">
+    <div id="hi-score-container" class="hidden">
       <h3 class="score-header">HI-SCORE</h3>
       <h3 class="hi-score">0</h3>
     </div>
@@ -70,6 +102,10 @@
         <div class="turbo-button">
           <h3 class="turbo-button-text">HOLD SPACE</h3>
         </div>
+      </div>
+    </div>
+    <div class="background">
+      <div class="buildings-container">
       </div>
     </div>
     <div class="player-area">
